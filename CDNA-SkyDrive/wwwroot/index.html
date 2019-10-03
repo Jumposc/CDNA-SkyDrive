@@ -17,17 +17,17 @@
     <div class="login-group">
         <p class="login-text">用户名密码登陆</p>
         <div class="btn-group" role="group" aria-label="...">
-            <a class="btn btn-default" id="login-btn" href="#" role="button">登陆</a>
-            <a class="btn btn-default" id="reg-btn" href="#" role="button">注册</a>
+            <a onclick="login()" class="btn btn-default" id="login-btn" role="button">登陆</a>
+            <a class="btn btn-default" id="reg-btn" href="/html/register.html" role="button">注册</a>
         </div>
         <div class="input">
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">用户名 </span>
-                <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Username" id="input-user" aria-describedby="basic-addon1">
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1"> 密码 </span>
-                <input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon1">
+                <input type="password" class="form-control" placeholder="Password" id="input-passwd" aria-describedby="basic-addon1">
             </div>
         </div>
     </div>

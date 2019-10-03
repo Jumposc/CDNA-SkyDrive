@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDNA-SkyDrive", "CDNA-SkyDrive\CDNA-SkyDrive.csproj", "{77545F14-A8A3-4651-A720-18D665A421B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDNA-SkyDrive", "CDNA-SkyDrive\CDNA-SkyDrive.csproj", "{77545F14-A8A3-4651-A720-18D665A421B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
