@@ -19,7 +19,7 @@ namespace CDNA_SkyDrive.API
         }
 
         [HttpPost]
-        public async Task<string> Post([FromForm] string name, [FromForm] string pwds)
+        public  string Post([FromForm] string name, [FromForm] string pwds)
         {
             return "token";
         }

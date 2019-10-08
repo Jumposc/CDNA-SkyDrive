@@ -1,5 +1,5 @@
 ﻿body {
-    background-image: url(/images/backgroud.jpg);
+    background-image: url(../images/backgroud.jpg);
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -53,7 +53,7 @@
 }
 
 #logo2 {
-    margin-left: 1050px;
+    margin-left: 1040px;
 }
 
 .info {
@@ -67,4 +67,7 @@
     position: fixed;
     transform: translateX(-50px);
     color: white;
+}
+#username,#password{
+    width:84px;
 }
