@@ -7,6 +7,7 @@
         body,html{
             width:100%;
             height:100%;
+            overflow:hidden;
         }
         .head{
             width:100%;
@@ -49,13 +50,136 @@
             top:80px;
             left:0px;
             color:black;
-            background:rgb(247,247,247);
+            background:rgb(245,245,245);
+        }
+        .type-ul{
+            list-style-type:none;
+            font-size:20px;
+            text-align:center;
+            padding:0px;
+        }
+        .type-ul li{
+            padding:10px 0px;
+            cursor:pointer;
+        }
+        .percent{
+            position:fixed;
+            bottom:80px;
+            left:10px;
+            width:180px;
+            height:10px;
+            border:2px solid #00ffff;
+        }
+        .percent-container{
+            height:10px;
+            background-color:#00ffff;
+            width:90%;
+        }
+        .percent-text{
+            position:absolute;
+            left:50%;
+            font-size:10px;
+            text-align:center;
+        }
+        .disk-text{
+            text-align:center;
+        }
+        .action-bar{
+            width:87%;
+            height:50px;
+            position:fixed;
+            top:80px;
+            left:200px;
+        }
+        .action-bar button{
+            border:1px solid #4fb2b8;
+            border-radius:5px;
+            background-color:white;
+            font-size:20px;
+            margin:5px;
+        }
+        .action-btn{
+            position:absolute;
+            top:10px;
+            right:50px;
+        }
+        .type-text{
+            position:fixed;
+            top:130px;
+            width:87%;
+            height:20px;
+            left:200px
+        }
+        .now-type-text{
+            position:absolute;
+            left:20px;
+            font-size:12px;
+            margin:0px;
+        }
+        .file-list{
+            position:fixed;
+            top:150px;
+            left:200px;
+            width:88%;
+            height:570px;
+        }
+        .file-info-title{
+            width:100%;
+            height:30px;
+        }
+        .file-info-container,.file{
+            width:100%;
+            height:30px;
+            list-style-type:none;
+            float:left;
+            padding:0px;
+            margin:0px;
+
+        }
+        .file-info-container li,.file li{
+            height:40px;
+            float:left;
+            border-bottom:1px solid rgba(128, 128, 128,0.2);
+            position:relative;
+
+        }
+        .file-info-container li span,.file li span{
+            position:absolute;
+            top:15px;
+            left:40%;
+            font-size:12px;
+            
+        }
+        .file-name-title,.file-name{
+            width:60%;
+        }
+        .file-size-title,.file-size{
+            width:20%;
+        }
+        .file-date-title,.file-date{
+            width:20%;
+        }
+        .file-list-container{
+            position:fixed;
+            top:181px;
+            width:88%;
+            height:75%;
+        }
+        .file li span{
+            font-size:15px;
+        }
+        .checkbox{
+            width:20px;
+            height:20px;
+            position:absolute;
+            left:20px;
+            top:12px;
         }
     </style>
 </head>
 <body>
     <div class="head">
-        <a class="logo" href="#">
+        <a class="logo" href="home.html">
             <img src="../images/logo.png" height="18%" width="18%"/>
         </a>
         <div class="user-info">
@@ -65,28 +189,87 @@
     </div>
     <div class="type">
         <ul class="type-ul">
-            <li>
-                <a>
-                    <span>全部</span>
-                </a>
+            <li class="type-all">
+                <span>全部</span>
             </li>
-            <li>
-                <a>
-                    <span>文档</span>
-                </a>
+            <li class="type-dosc">
+                <span>文档</span>
             </li>
-            <li>
-                <a>
-                    <span>图片</span>
-                </a>
+            <li class="type-photo">
+                <span>图片</span>
             </li>
-            <li>
-                <a>
-                    <span>多媒体</span>
-                </a>
+            <li class="type-vidio">
+                <span>多媒体</span>
             </li>
         </ul>
+        <div class="percent">
+            <div class="percent-container">
+                <span class="percent-text">90%</span>
+            </div>
+            <div class="disk-valume">
+                <p class="disk-text">28g/30g</p>
+            </div>
+        </div>
     </div>
+    <div class="action-bar">
+        <div class="action-btn">
+            <button>上传</button>
+            <button>下载</button>
+            <button>删除</button>
+            <button>新建文件夹</button>
+        </div>
+    </div>
+    <div class="type-text">
+        <p class="now-type-text">全部文件,共99个文件</p>
+    </div>
+    <div class="file-list">
+        <div class="file-info-title">
+            <ul class="file-info-container">
+                <li class="file-name-title"><span>文件名</span></li>
+                <li class="file-size-title"><span>文件大小</span></li>
+                <li class="file-date-title"><span>修改时间</span></li>
+            </ul>
+        </div>
+        <div class="file-list-container">
+            <div class="file-info">
+                <ul class="file">
 
+                    <li class="file-name">
+                        <input type="checkbox" class="checkbox" />
+                        <span>
+                            java学习资料
+                        </span>
+                    </li>
+                    <li class="file-size">
+                        <span>
+                            9.9M
+                        </span>
+                    </li>
+                    <li class="file-date">
+                        <span>
+                            2019-10-9
+                        </span>
+                    </li>
+                </ul>
+                <ul class="file">
+                    <li class="file-name">
+                        <input type="checkbox" class="checkbox" />
+                        <span>
+                            java学习资料
+                        </span>
+                    </li>
+                    <li class="file-size">
+                        <span>
+                            9.9M
+                        </span>
+                    </li>
+                    <li class="file-date">
+                        <span>
+                            2019-10-9
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 </body>
 </html>
