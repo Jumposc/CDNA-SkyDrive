@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace CDNA_SkyDrive.API
 {
@@ -13,15 +13,20 @@ namespace CDNA_SkyDrive.API
     public class LoginController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<string> Get()
+        public string Get()
         {
             return "OK";
         }
 
         [HttpPost]
-        public  string Post([FromForm] string name, [FromForm] string pwds)
+        public string Post([FromForm] string name, [FromForm] string pwds)
         {
-            return "token";
+            //if (!((name.Length > 6 && name.Length < 20) && (pwds.Length > 6 && pwds.Length < 20)))
+            //    return "ERROR";
+            //MySqlConnection connection = new MySqlConnection("");
+            //MySqlCommand command = new MySqlCommand("", connection);
+            //connection.Close();
+            return new Random().Next().ToString();
         }
     }
 }
