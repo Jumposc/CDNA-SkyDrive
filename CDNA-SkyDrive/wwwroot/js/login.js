@@ -5,20 +5,32 @@
     xhttp = new XMLHttpRequest(); 
     xhttp.open("POST", "/api/Login");
     xhttp.send(JSON.stringify(LoginInfo));
-    setTimeout("Check()", 800);
+    timeout = 0;
+    setTimeout("Check()", 10);
 
 }
+var timeout = 0;
 function Check() {
-    var json = JSON.parse(xhttp.responseText);
-    if (json.Message == "OK") {
-        var day = new Date();
-        day.setHours(day.getHours() + 24);
-        var cook = "Token=" + json.Data + ";" + "expires=" + day.toUTCString();
-        document.cookie = cook;
-        window.location.href = "../html/home.html";
+    timeout++;
+    if (xhttp.status == 200) {
+        var json = JSON.parse(xhttp.responseText);
+        if (json.Message == "OK") {
+            var day = new Date();
+            day.setHours(day.getHours() + 24);
+            var cook = "Token=" + json.Data + ";" + "expires=" + day.toUTCString();
+            document.cookie = cook;
+            window.location.href = "../html/home.html";
+        } else {
+            var LoginInfo = document.getElementById("login-error-info");
+            LoginInfo.style.display = "block";
+        }
     } else {
-        var LoginInfo = document.getElementById("login-error-info");
-        LoginInfo.style.display = "block";
+        if (timeout > 110) {
+            window.alert("timeout");
+            return;
+        }
+        setTimeout("Check()", 10);
     }
+    
 
 }
