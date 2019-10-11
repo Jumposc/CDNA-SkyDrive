@@ -4,6 +4,6 @@
     LoginInfo.pwds = document.getElementById("input-passwd").value.replace(/(^\s*)|(\s*$)/g, '');
     var xhttp = new XMLHttpRequest();
     xhttp.open("POST", "/api/Login");
-    xhttp.send(JSON.stringify(LoginInfo));
+    var Json = xhttp.send(JSON.stringify(LoginInfo));
     
 }
