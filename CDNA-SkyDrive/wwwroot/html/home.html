@@ -5,6 +5,13 @@
     <title></title>
     <link href="../css/home.css" type="text/css" rel="stylesheet" />
     <script src="../js/home.js"></script>
+    <style>
+        .file-handle{
+            position:absolute;
+            right:20px;
+            top:5px;
+        }
+    </style>
 </head>
 <body>
     <div class="head">
@@ -53,7 +60,7 @@
     </div>
     <div class="file-list">
         <div class="file-info-title">
-            <ul class="file-info-container back">
+            <ul class="file-info-container">
                 <li " class="file-name-title"><span>文件名</span></li>
                 <li class="file-size-title"><span>文件大小</span></li>
                 <li class="file-date-title"><span>修改时间</span></li>
@@ -61,12 +68,19 @@
         </div>
         <div class="file-list-container">
             <div class="file-info">
-                <ul class="file back" >
+                <ul class="file" >
                     <li class="file-name">
                         <input type="checkbox" class="checkbox" />
                         <span>
                             claris.mp4
                         </span>
+                        <div class="file-handle">
+                            <img src="../images/mv.png">
+                            <img src="../images/cp.png">
+                            <img src="../images/rename.png">
+                            <img src="../images/down.png">
+                            <img src="../images/delete.png">
+                        </div>
                     </li>
                     <li class="file-size">
                         <span>
@@ -79,7 +93,7 @@
                         </span>
                     </li>
                 </ul>
-                <ul class="file back">
+                <ul class="file">
                     <li class="file-name">
                         <input type="checkbox" class="checkbox" />
                         <span>
@@ -100,11 +114,23 @@
             </div>
         </div>
         <script>
-            var li = document.getElementsByTagName("li");
+            var li = document.querySelectorAll(".type-ul li");
             for (i = 0; i < li.length; i++) {
-                li[i].addEventListener("mouseover", function () { this.style.backgroundColor = "red" });
-                li[i].addEventListener("mouseleave", function () { this.style.backgroundColor = "#000" });
+                li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
+                li[i].addEventListener("mouseout", ChangeBackground(li[i], "rgb(248,248,248)"));
             }
+            var ul = document.querySelectorAll(".file-info ul,.file-info-container li");
+            for (i = 0; i < ul.length; i++) {
+                ul[i].addEventListener("mouseover", ChangeBackground(ul[i], "rgba(128,128,128,0.5)"));
+                ul[i].addEventListener("mouseout", ChangeBackground(ul[i], "rgb(255,255,255)"));
+            }
+            var evntul = document.querySelectorAll(".file-info ul");
+            var han = document.querySelectorAll(".file-handle");
+            for (i = 0; i < evntul.length; i++) {
+                evntul[i].addEventListener("mouseover", SetDisplay(han[i], "block"));
+                evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
+            }
+
         </script>
 
         </body>
