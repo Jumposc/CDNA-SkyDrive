@@ -31,15 +31,14 @@ namespace CDNA_SkyDrive.API
             {
                 MySqlConnection connection = new MySqlConnection("server=192.168.20.2;port=3306;user=root;password=123456; database=testbase;");
                 connection.Open();
-                MySqlCommand command = new MySqlCommand($"SELECT UserName FROM testbase.UserTable where  UserName='{user.name}'and PassWord='{user.pwds}';", connection);
+                MySqlCommand command = new MySqlCommand($"SELECT * FROM testbase.UserTable where  UserName='{user.name}'and PassWord='{user.pwds}';", connection);
                 MySqlDataReader data = command.ExecuteReader();
                 while (data.Read())
-                    if (data[0] != null)
+                    if (data[1] != null && data[1].Equals(user.name))
                     {
-                        if (data[0].Equals(user.name))
-                        {
-                            return JsonConvert.SerializeObject(new Return() { Token = new Random().Next().ToString(), Message = "OK" }); ;
-                        }
+                        string token = data[0].ToString() + DateTime.Now.ToString("yyyyMMddHH");
+                        token += "-" + AES.EncodeAES(token);
+                        return JsonConvert.SerializeObject(new Return() { Token = token, Message = "OK" }); ;
                     }
                 connection.Close();
                 return new Random().Next().ToString();
