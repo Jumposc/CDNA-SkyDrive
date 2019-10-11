@@ -9,6 +9,7 @@ using System.IO;
 using Newtonsoft.Json;
 using CDNA_SkyDrive.Mode;
 using CDNA_SkyDrive.Control;
+using System.Data;
 
 namespace CDNA_SkyDrive.API
 {
@@ -26,20 +27,18 @@ namespace CDNA_SkyDrive.API
             {
                 MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
                 connection.Open();
-                MySqlCommand command = new MySqlCommand($"SELECT * FROM testbase.UserTable where  UserName='{user.Name}'and PassWord='{user.Pwds}';", connection);
-                MySqlDataReader data = command.ExecuteReader();
-                if (data.FieldCount != 0)
+                MySqlDataAdapter adapter = new MySqlDataAdapter($"SELECT * FROM testbase.UserTable where  UserName='{user.Name}'and PassWord='{user.Pwds}';",connection);
+                DataSet data=new DataSet();
+                adapter.Fill(data,"Data1");
+                DataTable s = data.Tables["Data1"];
+                if (s.Rows.Count != 0)
                 {
-                    data.Read();
-                    string token = data[0].ToString() + DateTime.Now.ToString("yyyyMMddHH");
+                    string token = s.Rows[0][0].ToString() + DateTime.Now.ToString("yyyyMMddHH");
                     token += "-" + AES.EncodeAES(token);
-                    data.Close();
-                    connection.Close();
                     Json = JsonConvert.SerializeObject(new ReturnMode() { Data = token, Message = "OK" });
                 }
                 else
                     Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "用户名密码错误", Message = "Error" });
-                data.Close();
                 connection.Close();
             }
             else
