@@ -10,7 +10,7 @@ namespace CDNA_SkyDrive.API
     class AES
     {
         //AES密钥
-        const string keys = "0123456789012345";
+        const string keys = "CDNAwangpanysrhh";
         public static byte[] _key1 = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xED, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
         //AES加密
         /// <summary>
@@ -43,8 +43,10 @@ namespace CDNA_SkyDrive.API
             return Convert.ToBase64String(cipherBytes);
         }
         //AES界面
-        public static string DecodeAES(string text, string key, byte[] iv)
+        public static string DecodeAES(string text, string key = keys, byte[] iv = null)
         {
+            if (iv == null)
+                iv = _key1;
             RijndaelManaged rijndaelCipher = new RijndaelManaged();
             rijndaelCipher.Mode = CipherMode.CBC;
             rijndaelCipher.Padding = PaddingMode.Zeros;

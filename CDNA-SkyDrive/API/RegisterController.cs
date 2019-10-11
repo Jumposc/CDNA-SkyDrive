@@ -4,20 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System.IO;
-using Newtonsoft.Json;
 using CDNA_SkyDrive.Mode;
+using Newtonsoft.Json;
+using System.IO;
+using MySql.Data.MySqlClient;
 using CDNA_SkyDrive.Control;
 
 namespace CDNA_SkyDrive.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class RegisterController : ControllerBase
     {
         [HttpPost()]
-        public string Post()
+        public string Register()
         {
             string Json = "";
             string a = new StreamReader(HttpContext.Request.Body).ReadToEnd();
@@ -26,20 +26,11 @@ namespace CDNA_SkyDrive.API
             {
                 MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
                 connection.Open();
-                MySqlCommand command = new MySqlCommand($"SELECT * FROM testbase.UserTable where  UserName='{user.Name}'and PassWord='{user.Pwds}';", connection);
-                MySqlDataReader data = command.ExecuteReader();
-                if (data.FieldCount != 0)
-                {
-                    data.Read();
-                    string token = data[0].ToString() + DateTime.Now.ToString("yyyyMMddHH");
-                    token += "-" + AES.EncodeAES(token);
-                    data.Close();
-                    connection.Close();
-                    Json = JsonConvert.SerializeObject(new ReturnMode() { Data = token, Message = "OK" });
-                }
+                MySqlCommand command = new MySqlCommand($"insert testbase.UserTable value (0,'{user.Name}','{user.Pwds}');", connection);
+                if (command.ExecuteNonQuery() != 0)
+                    Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册成功", Message = "OK" });
                 else
-                    Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "用户名密码错误", Message = "Error" });
-                data.Close();
+                    Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，或有重复用户名", Message = "Error" });
                 connection.Close();
             }
             else
