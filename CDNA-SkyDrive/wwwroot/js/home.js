@@ -1,11 +1,12 @@
-﻿function SetOnMouse(list) {
-    list.addEventListener(onmousemove, ChangeBackground(list, "rgba(128,128,128,0.5)"));
+﻿
+function ChangeBackground(html, color) {
+    return function (){
+        html.style.backgroundColor = color;
+    }
 }
 
-
-//function ChangeBackground(html,color) {
-//    var list = html;
-//    list.style.backgroundColor = color;
-
-//}
-
+function SetDisplay(html,css) {
+    return function () {
+        html.style.display = css;
+    }
+}

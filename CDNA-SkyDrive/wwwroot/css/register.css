@@ -1,8 +1,4 @@
-﻿body {
-    background-image: url(../images/backgroud.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+﻿
 
 .login-group {
     border: 2px solid rgba(255, 255, 255,0.5);
@@ -46,15 +42,7 @@
     transform: translateX(-45%) translateY(-60%);
 }
 
-.head {
-    position: absolute;
-    top: 20px;
-    left: 50px;
-}
 
-#logo2 {
-    margin-left: 1040px;
-}
 
 .info {
     position: absolute;
