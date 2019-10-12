@@ -16,7 +16,9 @@ namespace CDNA_SkyDrive.Control
         /// <returns>资源内容</returns>
         public static string GetResources(string Key)
         {
-            JObject Json = JObject.Parse(new StreamReader(new FileStream("Resources.txt", FileMode.Open)).ReadToEnd());
+            FileStream file = new FileStream("Resources.txt", FileMode.Open);
+            JObject Json = JObject.Parse(new StreamReader(file).ReadToEnd());
+            file.Close();
             return Json[Key].ToString();
         }
     }
