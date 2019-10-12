@@ -5,6 +5,7 @@
     <title></title>
     <link href="/css/index.css" rel="stylesheet" />
     <link href="/css/register.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js/Register.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
@@ -17,26 +18,27 @@
     </div>
     <div class="login-group">
         <p class="login-text">用户名密码注册</p>
+        <p id="register-error">用户名以存在</p>
         <div class="btn-group" role="group" aria-label="...">
-            <a class="btn btn-default" id="login-btn" href="#" role="button" onclick="register()">确定注册</a>
+            <a class="btn btn-default" id="login-btn" role="button" onclick="Register()">确定注册</a>
             <a class="btn btn-default" id="reg-btn" href="/index.html" role="button">返回登陆</a>
         </div>
         <div class="input">
             <div class="input-group">
-                <span class="input-group-addon" id="useruser-name">用户名 </span>
-                <input type="text" class="form-control" placeholder="Useruser.name" id="reg-input-user" aria-describedby="basic-addon1">
+                <span class="input-group-addon" id="username">用户名 </span>
+                <input type="text" class="form-control" placeholder="UseruserName" id="reg-input-user" aria-describedby="basic-addon1" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" >
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="password"> 密码 </span>
-                <input type="password" class="form-control" placeholder="Password" id="reg-input-passwd" aria-describedby="basic-addon1">
+                <input type="password" class="form-control" placeholder="Password" id="reg-input-passwd" aria-describedby="basic-addon1" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" >
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="confirm-password"> 确认密码 </span>
-                <input type="password" class="form-control" placeholder="Confirm Password" id="reg-input-confirm-passwd" aria-describedby="basic-addon1">
+                <input type="password" class="form-control" placeholder="Confirm Password" id="reg-input-confirm-passwd" aria-describedby="basic-addon1" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" >
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="phone-number"> 手机号码 </span>
-                <input type="text" class="form-control" placeholder="Phone number" id="reg-input-phone-number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control" placeholder="Phone number" id="reg-input-phone-number" aria-describedby="basic-addon1" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" >
             </div>
         </div>
     </div>

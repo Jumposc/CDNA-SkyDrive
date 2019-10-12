@@ -100,6 +100,8 @@
 }
 
     .action-bar button {
+        position:relative;
+        top:-13px;
         border: 1px solid #4fb2b8;
         border-radius: 5px;
         background-color: white;
@@ -181,6 +183,7 @@
     top: 181px;
     width: 88%;
     height: 75%;
+    overflow:scroll;
 }
 
 .file li span {

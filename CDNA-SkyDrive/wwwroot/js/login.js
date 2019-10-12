@@ -2,15 +2,19 @@
     var LoginInfo = { Name: "", Pwds: "" };
     LoginInfo.Name = document.getElementById("input-user").value.replace(/(^\s*)|(\s*$)/g, '');
     LoginInfo.Pwds = document.getElementById("input-passwd").value.replace(/(^\s*)|(\s*$)/g, '');
-    xhttp = new XMLHttpRequest(); 
-    xhttp.open("POST", "/api/Login");
-    xhttp.send(JSON.stringify(LoginInfo));
-    timeout = 0;
-    setTimeout("Check()", 10);
-
+    if ((LoginInfo.Name || LoginInfo.Pwds) == "" || (LoginInfo.Name || LoginInfo.Pwds) == undefined || (LoginInfo.Name || LoginInfo.Pwds) == null) {
+        EchoLoginError("用户名或密码不能为空");
+    } else {
+        xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "/api/Login");
+        xhttp.send(JSON.stringify(LoginInfo));
+        timeout = 0;
+        CheckLogin();
+    }
 }
+
 var timeout = 0;
-function Check() {
+function CheckLogin() {
     timeout++;
     if (xhttp.status == 200) {
         var json = JSON.parse(xhttp.responseText);
@@ -21,16 +25,18 @@ function Check() {
             document.cookie = cook;
             window.location.href = "../html/home.html";
         } else {
-            var LoginInfo = document.getElementById("login-error-info");
-            LoginInfo.style.display = "block";
+            EchoLoginError("用户名或密码错误");
         }
     } else {
         if (timeout > 110) {
-            window.alert("timeout");
+            EchoLoginError("连接超时");
             return;
         }
-        setTimeout("Check()", 10);
+        setTimeout("CheckLogin()", 10);
     }
-    
-
+}
+function EchoLoginError(str) {
+    var LoginInfo = document.getElementById("login-error-info");
+    LoginInfo.innerHTML = str;
+    LoginInfo.style.display = "block";
 }
