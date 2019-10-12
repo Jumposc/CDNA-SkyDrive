@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CDNA_SkyDrive.API
 {
@@ -14,7 +17,15 @@ namespace CDNA_SkyDrive.API
         [HttpPost]
         public string PostList()
         {
-            //此处查数据库用户拥有文件
+            FileStream file = new FileStream("Resources.txt", FileMode.Open);
+            MD5 m = MD5.Create();
+            byte[] buffer = m.ComputeHash(file);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < buffer.Length; i++)
+            {
+                stringBuilder.Append(buffer[i].ToString("x2"));
+            }
+            string s = stringBuilder.ToString();
             return "";
         }
     }
