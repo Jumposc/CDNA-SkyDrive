@@ -12,21 +12,25 @@ namespace CDNA_SkyDrive.API
     [ApiController]
     public class LoadController : ControllerBase
     {
-        [HttpPost()]
-        public IActionResult UpLoad(IList<IFormFile> files)
+        [Route("Up")]
+        public IActionResult UpLoad()
         {
+            var files = Request.Form.Files;
             if (files != null)
             {
-                //处理多文件
-                foreach (var file in files)
+                try
                 {
-                    //如果需要对文件处理,可以根据文件扩展名,进行筛选
-                    var fileExtensionName = Path.GetExtension(file.FileName).Substring(1);
-                    var saveFilePath = Path.Combine("", "UploadFile", $"{DateTime.Now.ToString("yyyyMMddhhmmss")}.{fileExtensionName}");
-                    var stream = new FileStream(saveFilePath, FileMode.Create);
-                    //asp.net core对异步支持很好,如果使用异步可以使用file.CopyToAsync方法
-                    file.CopyTo(stream);
+                    //处理多文件
+                    foreach (var file in files)
+                    {
+                        var saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
+                        using (var stream = new FileStream(saveFilePath, FileMode.Create))
+                        {
+                            file.CopyToAsync(stream);
+                        }
+                    }
                 }
+                catch { }
                 return Ok();
             }
             else
