@@ -44,7 +44,6 @@ function OnLoadEvn() {
     inputbtn.addEventListener("change", function () {
         var form = document.getElementById("input-form");
         form.submit();
-        window.location.href = "/html/home.html";
 
     })
     var loadbox = document.getElementById("load-box");

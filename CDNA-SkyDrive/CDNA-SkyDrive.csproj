@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>CDNA_SkyDrive</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="UpLoadFile\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
