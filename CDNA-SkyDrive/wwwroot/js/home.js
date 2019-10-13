@@ -19,9 +19,18 @@ function LoadBoxClose() {
 }
 
 function PostFile() {
-    var xhttp = new XMLHttpRequest();
-
+    return function () {
+        var fileobj = document.getElementById("input-file").files;
+        var form = new FormData();
+        for (i = 0; i < fileobj.length; i++) {
+            form.append(fileobj[i].name, fileobj[i]);
+        }
+        xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/Load/Up");
+        xhr.send(form);
+    }
 }
+
 
 function OnLoadEvn() {
     var li = document.querySelectorAll(".type-ul li");
@@ -41,11 +50,7 @@ function OnLoadEvn() {
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
     var inputbtn = document.getElementById("input-file");
-    inputbtn.addEventListener("change", function () {
-        var form = document.getElementById("input-form");
-        form.submit();
-
-    })
+    inputbtn.addEventListener("change", PostFile());
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;
