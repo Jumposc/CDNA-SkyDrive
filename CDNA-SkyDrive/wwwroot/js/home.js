@@ -41,7 +41,12 @@ function OnLoadEvn() {
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
     var inputbtn = document.getElementById("input-file");
-    inputbtn.addEventListener("change", function () { window.alert(inputbtn.value) })
+    inputbtn.addEventListener("change", function () {
+        var from = document.getElementById("input-form");
+        from.submit();
+        return false;
+
+    })
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;
