@@ -18,19 +18,25 @@ namespace CDNA_SkyDrive.API
             var files = Request.Form.Files;
             if (files != null)
             {
+                FileStream stream = null;
+                string saveFilePath = null;
                 try
                 {
                     //处理多文件
                     foreach (var file in files)
                     {
-                        var saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
-                        using (var stream = new FileStream(saveFilePath, FileMode.Create))
-                        {
+                        saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
+                        using (stream = new FileStream(saveFilePath, FileMode.Create))
                             file.CopyToAsync(stream);
-                        }
                     }
                 }
-                catch { }
+                catch
+                {
+                    if (stream == null)
+                        stream.Close();
+                    if (System.IO.File.Exists(saveFilePath))
+                        System.IO.File.Delete(saveFilePath);
+                }
                 return Ok();
             }
             else
