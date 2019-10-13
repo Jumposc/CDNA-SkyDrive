@@ -42,9 +42,9 @@ function OnLoadEvn() {
     }
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", function () {
-        var from = document.getElementById("input-form");
-        from.submit();
-        return false;
+        var form = document.getElementById("input-form");
+        form.submit();
+        window.location.href = "/html/home.html";
 
     })
     var loadbox = document.getElementById("load-box");
