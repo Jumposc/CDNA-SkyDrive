@@ -286,7 +286,7 @@
         }
 
         .load-box, .load-box div {
-            display: block;
+            display: none;
         }
 
         #upload-box {
