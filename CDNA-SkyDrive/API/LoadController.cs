@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using CDNA_SkyDrive.Control;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CDNA_SkyDrive.Mode;
+using Newtonsoft.Json;
 
 namespace CDNA_SkyDrive.API
 {
@@ -13,46 +15,53 @@ namespace CDNA_SkyDrive.API
     [ApiController]
     public class LoadController : ControllerBase
     {
+        [HttpPost()]
         [Route("Up")]
-        public IActionResult UpLoad()
+        //[DisableFormValueModelBinding]
+        //[RequestFormLimits(MultipartBodyLengthLimit = 200 * 1024 * 1024)]
+        public async Task<IActionResult> UpLoad()
         {
-            var files = Request.Form.Files;
-            if (files != null)
+            return await (Task.Run(() =>
             {
-                FileStream stream = null;
-                string saveFilePath = null;
-                try
+                var files = Request.Form.Files;
+                if (files != null)
                 {
-                    //处理多文件
-                    foreach (var file in files)
+                    FileStream stream = null;
+                    string saveFilePath = null;
+                    try
                     {
-                        //saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
-                        //using (stream = new FileStream(saveFilePath, FileMode.Create))
-                        //    file.CopyToAsync(stream);
-                        Save_ReadFile.GetHash(file.OpenReadStream());
+                        //处理多文件
+                        foreach (var file in files)
+                        {
+                            //saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
+                            //using (stream = new FileStream(saveFilePath, FileMode.Create))
+                            //    file.CopyToAsync(stream);
+                            Save_ReadFile.GetHash(file.OpenReadStream());
+                        }
                     }
+                    catch
+                    {
+                        if (stream == null)
+                            stream.Close();
+                        if (System.IO.File.Exists(saveFilePath))
+                            System.IO.File.Delete(saveFilePath);
+                    }
+                    return Ok();
                 }
-                catch
+                else
                 {
-                    if (stream == null)
-                        stream.Close();
-                    if (System.IO.File.Exists(saveFilePath))
-                        System.IO.File.Delete(saveFilePath);
+                    return StatusCode(500);
                 }
-                return Ok();
-            }
-            else
-            {
-                return StatusCode(500);
-            }
+            }));
+
         }
 
         [HttpPost()]
-        public IActionResult DownLoad()
+        public async Task<IActionResult> DownLoad()
         {
             var stream = new FileStream("Resources.txt", FileMode.Open);
             stream.Seek(0, SeekOrigin.Begin);
-            return File(stream, "text/plain", "file.json");
+            return await Task.Run(() => { return File(stream, "text/plain", "file.json"); });
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CDNA_SkyDrive.Control;
+using CDNA_SkyDrive.Mode;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CDNA_SkyDrive.Mode;
 using Newtonsoft.Json;
 using System.IO;
-using MySql.Data.MySqlClient;
-using CDNA_SkyDrive.Control;
 
 namespace CDNA_SkyDrive.API
 {

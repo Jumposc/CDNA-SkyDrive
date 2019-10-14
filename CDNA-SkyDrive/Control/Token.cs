@@ -1,9 +1,6 @@
 ﻿using CDNA_SkyDrive.API;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CDNA_SkyDrive.Control
 {
@@ -15,6 +12,7 @@ namespace CDNA_SkyDrive.Control
             token += "-" + AES.EncodeAES(token);
             return token;
         }
+
         public static bool CheckToken(string s)
         {
             string[] str = s.Split('-');

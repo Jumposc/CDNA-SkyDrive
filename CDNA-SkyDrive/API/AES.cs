@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace CDNA_SkyDrive.API
 {
-    class AES
+    internal class AES
     {
         //AES密钥
-        const string keys = "CDNAwangpanysrhh";
+        private const string keys = "CDNAwangpanysrhh";
+
         public static byte[] _key1 = { 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xED, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
+
         //AES加密
         /// <summary>
         /// AES加密
@@ -42,6 +41,7 @@ namespace CDNA_SkyDrive.API
             byte[] cipherBytes = transform.TransformFinalBlock(plainText, 0, plainText.Length);
             return Convert.ToBase64String(cipherBytes);
         }
+
         //AES界面
         public static string DecodeAES(string text, string key = keys, byte[] iv = null)
         {

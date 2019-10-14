@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace CDNA_SkyDrive.Control
 {
