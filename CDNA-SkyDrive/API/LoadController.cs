@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CDNA_SkyDrive.Control;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +26,10 @@ namespace CDNA_SkyDrive.API
                     //处理多文件
                     foreach (var file in files)
                     {
-                        saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
-                        using (stream = new FileStream(saveFilePath, FileMode.Create))
-                            file.CopyToAsync(stream);
+                        //saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
+                        //using (stream = new FileStream(saveFilePath, FileMode.Create))
+                        //    file.CopyToAsync(stream);
+                        Save_ReadFile.GetHash(file.OpenReadStream());
                     }
                 }
                 catch
