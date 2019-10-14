@@ -41,7 +41,7 @@ namespace CDNA_SkyDrive.API
                     }
                     catch
                     {
-                        if (stream == null)
+                        if (stream != null)
                             stream.Close();
                         if (System.IO.File.Exists(saveFilePath))
                             System.IO.File.Delete(saveFilePath);
