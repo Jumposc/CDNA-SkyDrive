@@ -1,6 +1,7 @@
 ﻿using CDNA_SkyDrive.API;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,9 +15,20 @@ namespace CDNA_SkyDrive.Control
             token += "-" + AES.EncodeAES(token);
             return token;
         }
-        public static bool CheckToken()
+        public static bool CheckToken(string s)
         {
-            return false;
+            string[] str = s.Split('-');
+            string aaa = AES.DecodeAES(str[1]);
+            if (str[0] == AES.DecodeAES(str[1]).Replace("\0", ""))
+            {
+                DateTime tokentime = DateTime.ParseExact(str[0].Substring(1), "yyyyMMddHH", CultureInfo.InvariantCulture);
+                if (tokentime.AddDays(1) > DateTime.Now)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
         }
     }
 }

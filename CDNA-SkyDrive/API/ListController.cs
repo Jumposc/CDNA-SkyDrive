@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json;
+using CDNA_SkyDrive.Control;
+using MySql.Data.MySqlClient;
+using System.Data;
+using CDNA_SkyDrive.Mode;
 
 namespace CDNA_SkyDrive.API
 {
@@ -15,18 +20,21 @@ namespace CDNA_SkyDrive.API
     public class ListController : ControllerBase
     {
         [HttpPost]
-        public string PostList()
+        public IActionResult PostList()
         {
-            FileStream file = new FileStream("Resources.txt", FileMode.Open);
-            MD5 m = MD5.Create();
-            byte[] buffer = m.ComputeHash(file);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < buffer.Length; i++)
+            string Json = "";
+            string a = new StreamReader(HttpContext.Request.Body).ReadToEnd();
+            if (Token.CheckToken(a))
             {
-                stringBuilder.Append(buffer[i].ToString("x2"));
+                string ID = a.Split("-")[0];
+                ID = ID.Substring(0, ID.Length - 10);
+                string name = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};").Rows[0][1].ToString();
+                string file = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';").Rows[0][1].ToString();
+                Json = JsonConvert.SerializeObject(new ReturnMode() { Data = file, Message = "OK" });
+                return Ok(Json);
             }
-            string s = stringBuilder.ToString();
-            return "";
+            else
+                return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
         }
     }
 }
