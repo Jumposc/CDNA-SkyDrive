@@ -250,8 +250,8 @@
                 height: 25px;
                 margin: 0px;
                 padding: 0px;
-                position: fixed;
                 height: 25px;
+                display:block;
             }
 
         .load-info-title-name, .load-file-name {

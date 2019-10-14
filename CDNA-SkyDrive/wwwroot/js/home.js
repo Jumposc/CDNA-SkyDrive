@@ -20,7 +20,7 @@ function LoadBoxClose() {
 
 function PostFile() {
     return function () {
-        var fileobj = document.getElementById("input-file").files;
+        fileobj = document.getElementById("input-file").files;
         var form = new FormData();
         for (i = 0; i < fileobj.length; i++) {
             form.append(fileobj[i].name, fileobj[i]);
@@ -28,6 +28,47 @@ function PostFile() {
         xhr = new XMLHttpRequest();
         xhr.open("POST", "/api/Load/Up");
         xhr.send(form);
+        PushBox();
+        CheckPostFile();
+    }
+}
+
+function PushBox() {
+    var box = document.querySelectorAll(".load-box, .load-box div");
+    for (i = 0; i < box.length; i++) {
+        box[i].style.display = "block";
+    }
+
+}
+var timeout = 0;
+function CheckPostFile() {
+    timeout++;
+    if (xhr.status == 200) {
+        EchoLoadError("上传成功");
+        return;
+    }
+    if (xhr.status == 500) {
+        EchoLoadError("上传失败");
+        return;
+    }
+    setTimeout("CheckPostFile()", 10);
+        
+}
+function EchoLoadError(error) {
+    var BoxInfo = document.getElementById("load-file");
+    var Liname = ["load-file-name", "load-file-size", "load-file-status"];
+    for (i = 0; i < fileobj.length; i++) {
+        var Ul = document.createElement("ul");
+        Ul.className = "load-file-box";
+        BoxInfo.appendChild(Ul);
+        var fileinfo = [fileobj[i].name, fileobj[i].size / 1024 > 1 ? (fileobj[i].size / 1024 / 1024 > 1 ? Math.floor(fileobj[i].size / 1024 / 1024) + "M" : Math.floor(fileobj[i].size / 1024) + "kb") : fileobj[i].size + "b", error];
+        for (j = 0; j < Liname.length; j++) {
+            var Li = document.createElement("li");
+            Li.className = Liname[j];
+            Li.innerHTML = "<span>" + fileinfo[j] + "<span/>";
+            Ul.appendChild(Li);
+        }
+
     }
 }
 
