@@ -1,11 +1,11 @@
 ﻿
 function ChangeBackground(html, color) {
-    return function (){
+    return function () {
         html.style.backgroundColor = color;
     }
 }
 
-function SetDisplay(html,css) {
+function SetDisplay(html, css) {
     return function () {
         html.style.display = css;
     }
@@ -25,13 +25,35 @@ function PostFile() {
         for (i = 0; i < fileobj.length; i++) {
             form.append(fileobj[i].name, fileobj[i]);
         }
-        xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/Load/Up");
-        xhr.send(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/api/Load/Up", true);
         PushBox();
-        CheckPostFile();
+        CreateLoadBox();
+        xhr.upload.addEventListener("progress", function (e) {
+            {
+                if (e.lengthComputable) {
+                    var PreBox = document.getElementsByClassName('load-file-status-box');
+                    var FileSize = [];
+                    for (i = 0; i < fileobj.length; i++) {
+                        FileSize[i] = fileobj[i].size;
+                    }
+                    for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                        if (e.loaded / FileSize[i] < 1) {
+                            PreBox[i].style.width = 100 * e.loaded / FileSize[i]+ "%";
+                            PreBox[i].innerHTML = Math.floor(100 * e.loaded / FileSize[i]) + "%";
+                        }
+                        if (e.loaded / FileSize[i] >= 1) {
+                            PreBox[i].style.width = "100%";
+                            PreBox[i].innerHTML = "上传完成";
+                        }
+                    }
+                }
+            }
+        })
+        xhr.send(form);
     }
 }
+
 
 function PushBox() {
     var box = document.querySelectorAll(".load-box, .load-box div");
@@ -40,33 +62,23 @@ function PushBox() {
     }
 
 }
-var timeout = 0;
-function CheckPostFile() {
-    timeout++;
-    if (xhr.status == 200) {
-        EchoLoadError("上传成功");
-        return;
-    }
-    if (xhr.status == 500) {
-        EchoLoadError("上传失败");
-        return;
-    }
-    setTimeout("CheckPostFile()", 10);
-        
-}
-function EchoLoadError(error) {
+
+function CreateLoadBox() {
     var BoxInfo = document.getElementById("load-file");
     var Liname = ["load-file-name", "load-file-size", "load-file-status"];
     for (i = 0; i < fileobj.length; i++) {
         var Ul = document.createElement("ul");
         Ul.className = "load-file-box";
         BoxInfo.appendChild(Ul);
-        var fileinfo = [fileobj[i].name, fileobj[i].size / 1024 > 1 ? (fileobj[i].size / 1024 / 1024 > 1 ? Math.floor(fileobj[i].size / 1024 / 1024) + "M" : Math.floor(fileobj[i].size / 1024) + "kb") : fileobj[i].size + "b", error];
+        var fileinfo = [fileobj[i].name, fileobj[i].size / 1024 > 1 ? (fileobj[i].size / 1024 / 1024 > 1 ? Math.floor(fileobj[i].size / 1024 / 1024) + "M" : Math.floor(fileobj[i].size / 1024) + "kb") : fileobj[i].size + "b", "0%"];
         for (j = 0; j < Liname.length; j++) {
             var Li = document.createElement("li");
             Li.className = Liname[j];
-            Li.innerHTML = "<span>" + fileinfo[j] + "<span/>";
+            var SpBox = document.createElement("span");
+            SpBox.className = Liname[j] + "-box";
+            SpBox.innerText = fileinfo[j];
             Ul.appendChild(Li);
+            Li.appendChild(SpBox);
         }
 
     }
@@ -124,6 +136,6 @@ function OnLoadEvn() {
     loadbox.onmouseup = function () {
         isdown = false;
         loadbox.style.cursor = 'default';
-        }
-    
+    }
+
 }
