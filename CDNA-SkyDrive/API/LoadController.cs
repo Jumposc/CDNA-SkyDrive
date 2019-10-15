@@ -7,7 +7,7 @@ using CDNA_SkyDrive.Control;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CDNA_SkyDrive.Mode;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
 
@@ -26,7 +26,7 @@ namespace CDNA_SkyDrive.API
         {
             return await (Task.Run(() =>
             {
-                string token = Request.Headers["Token"];
+                string token = Request.Cookies["Token"];
                 var files = Request.Form.Files;
                 if (Token.CheckToken(token) && files != null)
                 {
@@ -41,12 +41,16 @@ namespace CDNA_SkyDrive.API
 
                             MySqlParameter hashParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                             hashParameter.Value = hash;
-                            if (SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter))
+                            int fileID = 0;
+                            if ((fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)) != -1)
                             {
                                 string ID = token.Split("-")[0];
                                 ID = ID.Substring(0, ID.Length - 10);
                                 string name = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};").Rows[0][1].ToString();
-                                string filestr = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';").Rows[0][1].ToString(); ;
+                                JObject filestr = JObject.Parse(SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';").Rows[0][1].ToString());
+                                filestr.Add(file.FileName, fileID);
+                                if (SQLControl.Insert($"insert testbase.UserFileTable (File) value ('{filestr.ToString()}');") != 0)
+                                { }
                             }
                             else
                             {
@@ -54,7 +58,7 @@ namespace CDNA_SkyDrive.API
                                 System.IO.File.Exists(FilePath + filename);
                                 MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                                 blobParameter.Value = hash;
-                                if (SQLControl.Insert($"insert testbase.HashTable value (@hash,'{FilePath + filename}');", blobParameter) != 0)
+                                if (SQLControl.Insert($"insert testbase.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter) != 0)
                                 {
 
                                 }
@@ -73,7 +77,7 @@ namespace CDNA_SkyDrive.API
                 else
                 {
                 }
-                return StatusCode(500);
+                return Ok();
             }));
 
         }

@@ -15,7 +15,7 @@ namespace CDNA_SkyDrive.Control
             connection.Close();
             return data.Tables["Data1"];
         }
-        public static bool Select(string CommandText, params MySqlParameter[] parameter)
+        public static int Select(string CommandText, params MySqlParameter[] parameter)
         {
             MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
             connection.Open();
@@ -26,10 +26,12 @@ namespace CDNA_SkyDrive.Control
                     command.Parameters.Add(item);
                 }
             MySqlDataReader dataReader = command.ExecuteReader();
-            bool k = dataReader.Read();
+            int i = -1;
+            if (dataReader.Read())
+                i = (int)dataReader[0];
             dataReader.Close();
             connection.Close();
-            return k;
+            return i;
         }
 
         //public static MySqlDataReader Select(string CommandText, params MySqlParameter[] parameter)
