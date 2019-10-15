@@ -30,6 +30,9 @@ namespace CDNA_SkyDrive.API
                 int Code = 200;
                 string restr = "Ok";
                 string token = Request.Cookies["Token"];
+                //string[] p = new StreamReader(Request.Body).ReadToEnd().Split('/');
+                string[] p = "./A/".Split('/');
+                Queue<string> pathlist = null;
                 var files = Request.Form.Files;
                 if (Token.CheckToken(token) && files != null)
                 {
@@ -61,16 +64,19 @@ namespace CDNA_SkyDrive.API
                             ID = ID.Substring(0, ID.Length - 10);
 
                             DataTable table;
-                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) != null)
+                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
                                 throw new NewSqlException();
                             string name = table.Rows[0][1].ToString();
-                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) != null)
+                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
                                 throw new NewSqlException();
 
-                            JObject filestr = JObject.Parse(table.Rows[0][1].ToString());
-                            JObject filedata = new JObject();
-                            filedata["FileID"] = ID;
-                            filedata["Time"] = DateTime.Now.ToString();
+                            JArray filestr = JArray.Parse(table.Rows[0][1].ToString());
+                            pathlist = new Queue<string>(p);
+                            JToken fir = JToken.Parse("{time:\"2019 - 10 - 15\",name: \"A\",type: \"dir\",data:[]}");
+                            JToken nowdir = Dir.AddDir(filestr, pathlist, fir);
+                            //JObject filedata = new JObject();
+                            //filedata["FileID"] = ID;
+                            //filedata["Time"] = DateTime.Now.ToString();
                             filestr[file.FileName] = fileID;
                             if (0 != SQLControl.Execute($"UPDATE testbase.UserFileTable SET (File='{filestr.ToString()}')where UserName='{name}';"))
                             {
