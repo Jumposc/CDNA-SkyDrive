@@ -34,25 +34,38 @@ function PostFile() {
         xhr.upload.addEventListener("progress", function (e) {
             {
                 if (e.lengthComputable) {
-                    var PreBox = document.getElementsByClassName('load-file-status-box');
+                    PreBox = document.getElementsByClassName('load-file-status-box');
                     var FileSize = [];
                     for (i = 0; i < fileobj.length; i++) {
                         FileSize[i] = fileobj[i].size;
                     }
                     for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
                         if (e.loaded / FileSize[i] < 1) {
-                            PreBox[i].style.width = 100 * e.loaded / FileSize[i]+ "%";
+                            PreBox[i].style.width = 100 * e.loaded / FileSize[i] + "%";
                             PreBox[i].innerHTML = Math.floor(100 * e.loaded / FileSize[i]) + "%";
                         }
                         if (e.loaded / FileSize[i] >= 1) {
                             PreBox[i].style.width = "100%";
-                            PreBox[i].innerHTML = "上传完成";
+                            PreBox[i].innerHTML = "检验中";
                         }
                     }
                 }
             }
         })
         xhr.send(form);
+        fileobj.outerHTML = fileobj.outerHTML;
+        xhr.onreadystatechange = function () {
+            if (xhr.status == 200) {
+                for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                    PreBox[i].innerHTML = "上传成功";
+                }
+            } else {
+                for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                    PreBox[i].innerHTML = "上传失败";
+                    PreBox[i].style.backgroundColor = "#db2828";
+                }
+            }
+        }
     }
 }
 
@@ -86,8 +99,22 @@ function CreateLoadBox() {
     }
 }
 
+//获取用户文件列表
+function GetUserFileList() {
+    var xmlhttp = new XMLHttpRequest();
+    var Token = document.cookie;
+    xmlhttp.open("POST", "/api/List");
+    xmlhttp.send(Token.slice(Token.indexOf("=") + 1,Token.length));
 
+}
+function AddFileList() {
+
+}
+
+
+//页面加载时，添加事件
 function OnLoadEvn() {
+    GetUserFileList();
     var li = document.querySelectorAll(".type-ul li");
     for (i = 0; i < li.length; i++) {
         li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
@@ -106,6 +133,7 @@ function OnLoadEvn() {
     }
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
+
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;

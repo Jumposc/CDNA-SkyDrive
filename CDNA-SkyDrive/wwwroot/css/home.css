@@ -18,6 +18,7 @@
     right: 150px;
     top: 10px;
     color: white;
+    width:230px;
 }
 
 .logo {
@@ -27,8 +28,8 @@
 }
 
 #user-head-name {
-    position: fixed;
-    top: 30px;
+    position:absolute;
+    top: 20px;
     padding-left: 8px;
     font-size: 20px;
 }
@@ -138,10 +139,11 @@
     height: 570px;
 }
 
-.file-info-title {
-    width: 100%;
+.file-info-title,.file-info {
+    width: 1351px;
     height: 30px;
 }
+
 
 .file-info-container, .file {
     width: 100%;
@@ -269,13 +271,13 @@
     border: solid 1px #4cff00;
     border-radius: 2px;
 }
-    .load-file-status-box {
-        background-color:#ff6a00;
-        display: inline-block;
-        text-align: center;
-        height:24px;
-        width:0px;
-    }
+.load-file-status-box {
+    background-color: #34d432;
+    display: inline-block;
+    text-align: center;
+    height: 24px;
+    width: 0px;
+}
 
 
 .load-info-title li, .load-file-box li {
