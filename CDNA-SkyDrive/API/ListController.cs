@@ -28,29 +28,18 @@ namespace CDNA_SkyDrive.API
                 string ID = a.Split("-")[0];
                 ID = ID.Substring(0, ID.Length - 10);
                 DataTable table;
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) != null)
+                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 string name = table.Rows[0][1].ToString();
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) != null)
+                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
-                JToken file = JObject.Parse(table.Rows[0][1].ToString());
-                JToken nowdir = intodir(file, path);
-                Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "", Message = "OK" });
+                JToken file = JToken.Parse(table.Rows[0][1].ToString());
+                JToken nowdir = Dir.Intodir(file, path);
+                Json = JsonConvert.SerializeObject(new ReturnMode() { Data = nowdir.ToString(), Message = "OK" });
                 return Ok(Json);
             }
             else
                 return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
-        }
-
-        JToken intodir(JToken jToken, Queue<string> list)
-        {
-            if (list.Count == 0)
-                return null;
-            string name = list.Dequeue();
-            foreach (var item in jToken)
-                if (item["type"].ToString() == "dir" && item["name"].ToString() == name)
-                    return intodir(item, list);
-            return null;
         }
     }
 }
