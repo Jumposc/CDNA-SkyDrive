@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UpLoadFile\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="UpLoadFile\" />
   </ItemGroup>
 
   <ItemGroup>

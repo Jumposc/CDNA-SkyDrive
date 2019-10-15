@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CDNA_SkyDrive.Mode;
 using Newtonsoft.Json;
+using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace CDNA_SkyDrive.API
 {
@@ -15,6 +17,7 @@ namespace CDNA_SkyDrive.API
     [ApiController]
     public class LoadController : ControllerBase
     {
+        const string FilePath = "UpLoadFile/";
         [HttpPost()]
         [Route("Up")]
         //[DisableFormValueModelBinding]
@@ -23,35 +26,54 @@ namespace CDNA_SkyDrive.API
         {
             return await (Task.Run(() =>
             {
+                string token = Request.Headers["Token"];
                 var files = Request.Form.Files;
-                if (files != null)
+                if (Token.CheckToken(token) && files != null)
                 {
-                    FileStream stream = null;
+                    Stream stream = null;
                     string saveFilePath = null;
                     try
                     {
-                        //处理多文件
                         foreach (var file in files)
                         {
-                            //saveFilePath = Path.Combine("", "UploadFile", $"{file.FileName}");
-                            //using (stream = new FileStream(saveFilePath, FileMode.Create))
-                            //    file.CopyToAsync(stream);
-                            Save_ReadFile.GetHash(file.OpenReadStream());
+                            stream = file.OpenReadStream();
+                            byte[] hash = Save_ReadFile.GetHash(stream);
+
+                            MySqlParameter hashParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
+                            hashParameter.Value = hash;
+                            if (SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter))
+                            {
+                                string ID = token.Split("-")[0];
+                                ID = ID.Substring(0, ID.Length - 10);
+                                string name = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};").Rows[0][1].ToString();
+                                string filestr = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';").Rows[0][1].ToString(); ;
+                            }
+                            else
+                            {
+                                string filename = DateTime.Now.ToString("yyyyMMddhhmmss");
+                                System.IO.File.Exists(FilePath + filename);
+                                MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
+                                blobParameter.Value = hash;
+                                if (SQLControl.Insert($"insert testbase.HashTable value (@hash,'{FilePath + filename}');", blobParameter) != 0)
+                                {
+
+                                }
+                            }
+
                         }
                     }
-                    catch
+                    catch (Exception e)
                     {
                         if (stream != null)
                             stream.Close();
                         if (System.IO.File.Exists(saveFilePath))
                             System.IO.File.Delete(saveFilePath);
                     }
-                    return Ok();
                 }
                 else
                 {
-                    return StatusCode(500);
                 }
+                return StatusCode(500);
             }));
 
         }
