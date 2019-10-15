@@ -10,6 +10,7 @@ using CDNA_SkyDrive.Mode;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
 
 namespace CDNA_SkyDrive.API
 {
@@ -26,6 +27,8 @@ namespace CDNA_SkyDrive.API
         {
             return await (Task.Run(() =>
             {
+                int Code = 200;
+                string restr = "Ok";
                 string token = Request.Cookies["Token"];
                 var files = Request.Form.Files;
                 if (Token.CheckToken(token) && files != null)
@@ -42,42 +45,56 @@ namespace CDNA_SkyDrive.API
                             MySqlParameter hashParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                             hashParameter.Value = hash;
                             int fileID = 0;
-                            if ((fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)) != -1)
-                            {
-                                string ID = token.Split("-")[0];
-                                ID = ID.Substring(0, ID.Length - 10);
-                                string name = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};").Rows[0][1].ToString();
-                                JObject filestr = JObject.Parse(SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';").Rows[0][1].ToString());
-                                filestr.Add(file.FileName, fileID);
-                                if (SQLControl.Insert($"insert testbase.UserFileTable (File) value ('{filestr.ToString()}');") != 0)
-                                { }
-                            }
-                            else
-                            {
+                            //检查Hash表里是否有这个文件
+                            if (-1 == (fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)))
+                            {//没有就加进去
                                 string filename = DateTime.Now.ToString("yyyyMMddhhmmss");
                                 System.IO.File.Exists(FilePath + filename);
                                 MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                                 blobParameter.Value = hash;
-                                if (SQLControl.Insert($"insert testbase.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter) != 0)
-                                {
-
-                                }
+                                if (0 == SQLControl.Execute($"insert testbase.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter))
+                                    throw new NewSqlException();
+                                fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", blobParameter);
                             }
+                            //把Hash绑定到用户文件列表上
+                            string ID = token.Split("-")[0];
+                            ID = ID.Substring(0, ID.Length - 10);
 
+                            DataTable table;
+                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) != null)
+                                throw new NewSqlException();
+                            string name = table.Rows[0][1].ToString();
+                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) != null)
+                                throw new NewSqlException();
+
+                            JObject filestr = JObject.Parse(table.Rows[0][1].ToString());
+                            JObject filedata = new JObject();
+                            filedata["FileID"] = ID;
+                            filedata["Time"] = DateTime.Now.ToString();
+                            filestr[file.FileName] = fileID;
+                            if (0 != SQLControl.Execute($"UPDATE testbase.UserFileTable SET (File='{filestr.ToString()}')where UserName='{name}';"))
+                            {
+                            }
                         }
                     }
-                    catch (Exception e)
+                    catch (IOException)
                     {
+                        Code = 500;
+                        restr = JsonConvert.SerializeObject(new ReturnMode() { Data = null, Message = "服务器保存错误！" });
                         if (stream != null)
                             stream.Close();
                         if (System.IO.File.Exists(saveFilePath))
                             System.IO.File.Delete(saveFilePath);
                     }
+                    catch (NewSqlException)
+                    {
+                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                    }
                 }
                 else
                 {
                 }
-                return Ok();
+                return StatusCode(Code, restr);
             }));
 
         }

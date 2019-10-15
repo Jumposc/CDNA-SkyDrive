@@ -19,9 +19,9 @@ namespace CDNA_SkyDrive.API
             UserMode user = JsonConvert.DeserializeObject<UserMode>(a);
             if (!string.IsNullOrEmpty(user.Name) | !string.IsNullOrWhiteSpace(user.Name) | !string.IsNullOrEmpty(user.Pwds) | !string.IsNullOrWhiteSpace(user.Pwds))
             {
-                if (0 != SQLControl.Insert($"insert testbase.UserTable value (0,'{user.Name}','{user.Pwds}');"))
+                if (0 != SQLControl.Execute($"insert testbase.UserTable value (0,'{user.Name}','{user.Pwds}');"))
                 {
-                    if (0 != SQLControl.Insert($"insert testbase.UserTable value ('{user.Name}','{user.Pwds}','InitialImage.jpg');"))
+                    if (0 != SQLControl.Execute($"insert testbase.UserTable value ('{user.Name}','{user.Pwds}','InitialImage.jpg');"))
                         Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册成功", Message = "OK" });
                     else
                         Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，服务器错误", Message = "OK" });
