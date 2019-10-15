@@ -26,6 +26,8 @@ function PostFile() {
             form.append(fileobj[i].name, fileobj[i]);
         }
         var xhr = new XMLHttpRequest();
+        var Token = document.cookie.Token;
+        xhr.setRequestHeader("Token", Token);
         xhr.open("POST", "/api/Load/Up", true);
         PushBox();
         CreateLoadBox();
