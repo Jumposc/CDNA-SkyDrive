@@ -100,11 +100,10 @@ function CreateLoadBox() {
 }
 
 //获取用户文件列表
-function GetUserFileList() {
+function GetUserFileList(path) {
     var xmlhttp = new XMLHttpRequest();
-    var Token = document.cookie;
     xmlhttp.open("POST", "/api/List");
-    xmlhttp.send(Token.slice(Token.indexOf("=") + 1,Token.length));
+    xmlhttp.send(path);
 
 }
 function AddFileList() {
@@ -114,7 +113,7 @@ function AddFileList() {
 
 //页面加载时，添加事件
 function OnLoadEvn() {
-    GetUserFileList();
+    GetUserFileList("./");
     var li = document.querySelectorAll(".type-ul li");
     for (i = 0; i < li.length; i++) {
         li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
