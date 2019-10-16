@@ -107,7 +107,7 @@ function GetUserFileList(path) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/api/List");
     xmlhttp.send(path);
-    
+
     xmlhttp.onreadystatechange = GetFileList(xmlhttp);
 }
 function GetFileList(xmlhttp) {
@@ -138,7 +138,23 @@ function CreateFileDirList(Dir) {
 
 function Down() {
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "/api/Load/Down");
+    xmlhttp.open("POST", "/api/Load/Down", true);
+    xmlhttp.responseType = "blob";
+    xmlhttp.onreadystatechange = function (data) {
+        var content = xmlhttp.response;
+
+        var elink = document.createElement('a');
+        elink.download = "123.txt";
+        elink.style.display = 'none';
+
+        var blob = new Blob([content]);
+        elink.href = URL.createObjectURL(blob);
+
+        document.body.appendChild(elink);
+        elink.click();
+
+        document.body.removeChild(elink);
+    };
     xmlhttp.send();
 
 }
