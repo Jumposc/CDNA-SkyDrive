@@ -26,9 +26,7 @@ function PostFile() {
             form.append(fileobj[i].name, fileobj[i]);
         }
         var xhr = new XMLHttpRequest();
-        var Token = document.cookie.Token;
         xhr.open("POST", "/api/Load/Up", true);
-        xhr.setRequestHeader("Token", Token);
         PushBox();
         CreateLoadBox();
         xhr.upload.addEventListener("progress", function (e) {
@@ -36,35 +34,39 @@ function PostFile() {
                 if (e.lengthComputable) {
                     PreBox = document.getElementsByClassName('load-file-status-box');
                     var FileSize = [];
+                    var j;
                     for (i = 0; i < fileobj.length; i++) {
                         FileSize[i] = fileobj[i].size;
                     }
-                    for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                    for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
+                        j = i;
                         if (e.loaded / FileSize[i] < 1) {
-                            PreBox[i].style.width = 100 * e.loaded / FileSize[i] + "%";
-                            PreBox[i].innerHTML = Math.floor(100 * e.loaded / FileSize[i]) + "%";
+                            PreBox[i].style.width = 100 * e.loaded / FileSize[i - j] + "%";
+                            PreBox[i].innerHTML = Math.floor(100 * e.loaded / FileSize[i - j]) + "%";
                         }
-                        if (e.loaded / FileSize[i] >= 1) {
+                        if (e.loaded / FileSize[i - j] >= 1) {
                             PreBox[i].style.width = "100%";
                             PreBox[i].innerHTML = "检验中";
                         }
+                        j--;
                     }
                 }
             }
         })
         xhr.send(form);
-        fileobj.outerHTML = fileobj.outerHTML;
         xhr.onreadystatechange = function () {
             if (xhr.status == 200) {
-                for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传成功";
                 }
             } else {
-                for (i = PreBox.length - fileobj.length; i < fileobj.length; i++) {
+                for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传失败";
                     PreBox[i].style.backgroundColor = "#db2828";
                 }
             }
+            var FileValue = document.getElementById("input-file");
+            FileValue.value = null;
         }
     }
 }
@@ -132,7 +134,6 @@ function OnLoadEvn() {
     }
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
-
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;
