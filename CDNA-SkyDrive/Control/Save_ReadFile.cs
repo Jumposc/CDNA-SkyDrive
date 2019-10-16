@@ -11,7 +11,7 @@ namespace CDNA_SkyDrive.Control
             try
             {
                 using (FileStream fileStream = new FileStream(filepath, FileMode.Create))
-                    file.CopyToAsync(fileStream);
+                    file.CopyTo(fileStream);
             }
             catch { return false; }
             return true;
