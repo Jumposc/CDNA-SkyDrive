@@ -27,8 +27,6 @@ namespace CDNA_SkyDrive.API
         {
             return await (Task.Run(() =>
             {
-                int Code = 200;
-                string restr = "Ok";
                 string token = Request.Cookies["Token"];
                 //string[] p = new StreamReader(Request.Body).ReadToEnd().Split('/');
                 string[] p = "./A/".Split('/');
@@ -72,25 +70,25 @@ namespace CDNA_SkyDrive.API
 
                             JArray filestr = JArray.Parse(table.Rows[0][1].ToString());
                             pathlist = new Queue<string>(p);
-                            JToken fir = JToken.Parse("{time:\"2019 - 10 - 15\",name: \"A\",type: \"dir\",data:[]}");
-                            JToken nowdir = Dir.AddDir(filestr, pathlist, fir);
-                            //JObject filedata = new JObject();
-                            //filedata["FileID"] = ID;
-                            //filedata["Time"] = DateTime.Now.ToString();
-                            filestr[file.FileName] = fileID;
-                            if (0 != SQLControl.Execute($"UPDATE testbase.UserFileTable SET (File='{filestr.ToString()}')where UserName='{name}';"))
-                            {
-                            }
+                            JObject jo = new JObject();
+                            jo.Add("time", DateTime.Now.ToString("yyyy-MM-dd"));
+                            jo.Add("name", file.FileName);
+                            jo.Add("type", "file");
+                            jo.Add("data", fileID);
+                            JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
+
+                            if (0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET (File='{filestr.ToString()}')where UserName='{name}';"))
+                                throw new NewSqlException();
+                            return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
                         }
                     }
                     catch (IOException)
                     {
-                        Code = 500;
-                        restr = JsonConvert.SerializeObject(new ReturnMode() { Data = null, Message = "服务器保存错误！" });
                         if (stream != null)
                             stream.Close();
                         if (System.IO.File.Exists(saveFilePath))
                             System.IO.File.Delete(saveFilePath);
+                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "服务器保存错误", Message = "Error" }));
                     }
                     catch (NewSqlException)
                     {
@@ -98,9 +96,8 @@ namespace CDNA_SkyDrive.API
                     }
                 }
                 else
-                {
-                }
-                return StatusCode(Code, restr);
+                    return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
+                return Ok("程序运行完成");
             }));
 
         }
