@@ -28,8 +28,8 @@ namespace CDNA_SkyDrive.API
             return await (Task.Run(() =>
             {
                 string token = Request.Cookies["Token"];
-                //string[] p = new StreamReader(Request.Body).ReadToEnd().Split('/');
-                string[] p = "./A/".Split('/');
+                string[] p = Request.Headers["Path"].ToString().Split('/');
+                //string[] p = "./A/".Split('/');
                 Queue<string> pathlist = null;
                 var files = Request.Form.Files;
                 if (Token.CheckToken(token) && files != null)
@@ -77,7 +77,7 @@ namespace CDNA_SkyDrive.API
                             jo.Add("data", fileID);
                             JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
-                            if (0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET (File='{filestr.ToString()}')where UserName='{name}';"))
+                            if (0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
                                 throw new NewSqlException();
                             return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
                         }
