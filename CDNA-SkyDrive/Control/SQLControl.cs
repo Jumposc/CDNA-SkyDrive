@@ -5,22 +5,22 @@ namespace CDNA_SkyDrive.Control
 {
     public class SQLControl
     {
+        public static MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
         public static DataTable Select(string CommandText)
         {
             DataTable table = null;
-            MySqlConnection connection = null;
             MySqlDataAdapter adapter = null;
             try
             {
-                connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
-                connection.Open();
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
                 adapter = new MySqlDataAdapter(CommandText, connection);
                 DataSet data = new DataSet();
                 adapter.Fill(data, "Data1");
                 table = data.Tables["Data1"];
                 connection.Close();
             }
-            catch
+            catch (MySqlException e)
             {
                 if (connection != null)
                     connection.Close();
@@ -30,13 +30,12 @@ namespace CDNA_SkyDrive.Control
         public static int Select(string CommandText, params MySqlParameter[] parameter)
         {
             int i = -1;
-            MySqlConnection connection = null;
             MySqlCommand command = null;
             MySqlDataReader dataReader = null;
             try
             {
-                connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
-                connection.Open();
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
                 command = new MySqlCommand(CommandText, connection);
                 if (parameter != null)
                     foreach (var item in parameter)
@@ -77,12 +76,11 @@ namespace CDNA_SkyDrive.Control
         public static int Execute(string CommandText, params MySqlParameter[] parameter)
         {
             int i = 0;
-            MySqlConnection connection = null;
             MySqlCommand command = null;
             try
             {
-                connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
-                connection.Open();
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
                 command = new MySqlCommand(CommandText, connection);
                 if (parameter != null)
                     foreach (var item in parameter)
