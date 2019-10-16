@@ -18,9 +18,7 @@ namespace CDNA_SkyDrive.API
         {
             string Json = "";
             string[] p = new StreamReader(Request.Body).ReadToEnd().Split('/');
-            Queue<string> path = new Queue<string>();
-            foreach (string i in p)
-                path.Enqueue(i);
+            Queue<string> path = new Queue<string>(p);
             string a = Request.Cookies["Token"];
             if (Token.CheckToken(a))
             {

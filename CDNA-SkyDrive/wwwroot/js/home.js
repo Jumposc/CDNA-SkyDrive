@@ -23,6 +23,16 @@ function sortByKey(array, key) {
 function SizeUnit(size) {
     return size / 1024 > 1 ? (size / 1024 / 1024 > 1 ? Math.floor(size / 1024 / 1024) + "M" : Math.floor(size / 1024) + "kb") : size + "b";
 }
+//返回上级目录
+function BackDir() {
+    if (NowPath == "./") {
+        return;
+    }
+    var path = NowPath.split("/"); 
+    path.splice((path.length - 2), 1);
+    NowPath = path.join("/");
+    GetUserFileList(NowPath);
+}
 //关闭上传窗体
 function LoadBoxClose() {
     var CloseHTML = document.getElementsByClassName("load-box");
@@ -119,16 +129,23 @@ function CreateLoadBox() {
 function ClearFileList() {
     var Box = document.getElementById("file-list-container");
     var List = document.querySelectorAll(".file-list-container ul");
-    for (i = 0; i < List.length; i++) {
-        Box.removeChild(List[i]);
+    var BackBtn = document.getElementById("back-bnt");
+    if (BackBtn != null) {
+        Box.removeChild(BackBtn);
     }
+    if (List.length != 0) {
+        for (i = 0; i < List.length; i++) {
+            Box.removeChild(List[i]);
+        }
+    }
+    
 }
 
 //获取用户文件列表
 function GetUserFileList(path) {
     ClearFileList();
     if (path != "./") {
-        NowPath = NowPath + path;
+        NowPath = NowPath + path + "\/";
     }
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/api/List");
@@ -140,6 +157,8 @@ function GetFileList(xmlhttp) {
         if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             var FileList = JSON.parse(JSON.parse(xmlhttp.responseText).Data);
             FindFileType(FileList);
+        } else {
+            return;
         }
     }
 }
@@ -159,10 +178,17 @@ function FindFileType(FileList) {
 }
 //创建目录列表
 function CreateFileDirList(Dir) {
+    var FileBox = document.getElementById("file-list-container");
+    if (NowPath != "./") {
+        var Back = document.createElement("a");
+        Back.id = "back-bnt";
+        Back.innerHTML = "返回上级";
+        Back.onclick = function () { BackDir() };
+        FileBox.appendChild(Back);
+    }
     if (Dir.length > 1) {
         Dir = sortByKey(Dir, "name");
     }
-    var FileBox = document.getElementById("file-list-container");
     var LiName = ["file-name-dir", "file-size", "file-date"];
     for (i = 0; i < Dir.length; i++) {
         var DirInfo = [Dir[i].name, "目录", Dir[i].time];
@@ -186,6 +212,11 @@ function CreateFileDirList(Dir) {
         A.name = Dir[i].name;
         A.onclick = function (a) { GetUserFileList(A.name) };
         DirList[i].appendChild(A);
+        var Div = document.createElement("div");
+        Div.className = "file-handle";
+        Div.style.display = "none";
+        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/rename.png\">"  + "<img src=\"../images/delete.png\">";
+        DirList[i].appendChild(Div);
     }
 }
 //创建文件列表
@@ -210,39 +241,42 @@ function CreateFileList(File) {
         }
 
     }
-    var LiName = document.getElementsByClassName("file-name");
-    for (i = 0; i < LiName.length;i++) {
+    var FileLiName = document.getElementsByClassName("file-name");
+    for (i = 0; i < FileLiName.length;i++) {
         var CheckBox = document.createElement("input");
         var Div = document.createElement("div");
         Div.className = "file-handle";
         Div.style.display = "none";
-        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/cp.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/down.png\">" + "<img src=\"../images/delete.png\">";
+        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/cp.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/down.png\" id=\""+ File[i].name + "\"" + "onclick=\"Down(this.id)\"" + ">" + "<img src=\"../images/delete.png\">";
         CheckBox.type = "checkbox";
         CheckBox.className = "checkbox";
         CheckBox.value = File[i].name;
-        LiName[i].appendChild(CheckBox);
-        LiName[i].appendChild(Div);
+        FileLiName[i].appendChild(CheckBox);
+        FileLiName[i].appendChild(Div);
     }
     AddEven();
 }
 
     
-
-function Down() {
+//下载文件方法
+function Down(name) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/api/Load/Down", true);
     xmlhttp.responseType = "blob";
+    xmlhttp.setRequestHeader("Path", NowPath + name);
     xmlhttp.onreadystatechange = function (data) {
         if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
-        var content = xmlhttp.response;
-        var elink = document.createElement('a');
-        elink.download = "123.txt";
-        elink.style.display = 'none';
-        var blob = new Blob([content]);
-        elink.href = URL.createObjectURL(blob);
-        document.body.appendChild(elink);
-        elink.click();
-        document.body.removeChild(elink);
+            var content = xmlhttp.response;
+            var elink = document.createElement('a');
+            elink.download = name;
+            elink.style.display = 'none';
+            var blob = new Blob([content]);
+            elink.href = URL.createObjectURL(blob);
+            document.body.appendChild(elink);
+            elink.click();
+            document.body.removeChild(elink);
+        } else {
+            return;
         }
     };
     xmlhttp.send();
@@ -261,10 +295,11 @@ function AddEven() {
         evntul[i].addEventListener("mouseover", SetDisplay(han[i], "block"));
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
+    //var LiDir = document.querySelectorAll("");
 }
 //页面加载时，添加事件
 function OnLoadEvn() {
-    GetUserFileList("./");
+    GetUserFileList(NowPath);
     //Down();
     var li = document.querySelectorAll(".type-ul li");
     for (i = 0; i < li.length; i++) {
