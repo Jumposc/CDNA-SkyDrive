@@ -221,7 +221,7 @@ function CreateFileDirList(Dir) {
     }
     var LiDir = document.querySelectorAll(".file-list-container .file-name-dir");
     for (i = 0; i < LiDir.length; i++) {
-        LiDir[i].addEventListener("click", function () { GetUserFileList(NowPath + this.children[0].name + "/")})
+        LiDir[i].addEventListener("click", function () { GetUserFileList(this.children[0].name + "/")})
     }
 }
 //创建文件列表
