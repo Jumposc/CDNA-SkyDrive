@@ -6,12 +6,18 @@ namespace CDNA_SkyDrive.Control
 {
     public class Save_ReadFile
     {
-        public static bool SaveFile(string username, IFormFile file)
+        public static bool SaveFile(string filepath, IFormFile file)
         {
-            return false;
+            try
+            {
+                using (FileStream fileStream = new FileStream(filepath, FileMode.Create))
+                    file.CopyToAsync(fileStream);
+            }
+            catch { return false; }
+            return true;
         }
 
-        public static bool AddFile(string username, IFormFile file)
+        public static bool AddFile(string filepath, IFormFile file)
         {
             return false;
         }

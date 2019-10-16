@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace CDNA_SkyDrive.API
 {
@@ -30,7 +31,6 @@ namespace CDNA_SkyDrive.API
                 string token = Request.Cookies["Token"];
                 string[] p = Request.Headers["Path"].ToString().Split('/');
                 //string[] p = "./A/".Split('/');
-                Queue<string> pathlist = null;
                 var files = Request.Form.Files;
                 if (Token.CheckToken(token) && files != null)
                 {
@@ -50,7 +50,8 @@ namespace CDNA_SkyDrive.API
                             if (-1 == (fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)))
                             {//没有就加进去
                                 string filename = DateTime.Now.ToString("yyyyMMddhhmmss");
-                                System.IO.File.Exists(FilePath + filename);
+                                if (!Save_ReadFile.SaveFile(FilePath + filename, file))
+                                    throw new IOException();
                                 MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                                 blobParameter.Value = hash;
                                 if (0 == SQLControl.Execute($"insert testbase.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter))
@@ -69,15 +70,17 @@ namespace CDNA_SkyDrive.API
                                 throw new NewSqlException();
 
                             JArray filestr = JArray.Parse(table.Rows[0][1].ToString());
-                            pathlist = new Queue<string>(p);
+                            Queue<string> pathlist = new Queue<string>(p);
                             JObject jo = new JObject();
+                            Encoding encoding = Encoding.Default;
                             jo.Add("time", DateTime.Now.ToString("yyyy-MM-dd"));
-                            jo.Add("name", file.FileName);
+                            string s = Encoding.UTF8.GetString(Encoding.Default.GetBytes(file.FileName));
+                            jo.Add("name", Encoding.UTF8.GetString(Encoding.Default.GetBytes(file.FileName)));
                             jo.Add("type", "file");
                             jo.Add("data", fileID);
                             JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
-                            if (0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
+                            if (0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='' where UserName='{name}';") && 0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
                                 throw new NewSqlException();
                             return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
                         }
@@ -103,11 +106,32 @@ namespace CDNA_SkyDrive.API
         }
 
         [HttpPost()]
+        [Route("Down")]
         public async Task<IActionResult> DownLoad()
         {
-            var stream = new FileStream("Resources.txt", FileMode.Open);
-            stream.Seek(0, SeekOrigin.Begin);
-            return await Task.Run(() => { return File(stream, "text/plain", "file.json"); });
+            return await Task.Run(() =>
+            {
+                string token = Request.Cookies["Token"];
+                //string[] p = Request.Headers["Path"].ToString().Split('/');
+                string[] p = "./A/B".Split('/');
+                if (Token.CheckToken(token))
+                {
+                    string ID = token.Split("-")[0];
+                    ID = ID.Substring(0, ID.Length - 10);
+                    DataTable table;
+                    if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
+                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                    string name = table.Rows[0][1].ToString();
+                    if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
+                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                    JToken file = JToken.Parse(table.Rows[0][1].ToString());
+                    Queue<string> pathlist = new Queue<string>(p);
+                    JToken nowdir = Dir.Intodir(file, pathlist);
+                    return Ok("");
+                }
+                else
+                    return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
+            });
         }
     }
 }
