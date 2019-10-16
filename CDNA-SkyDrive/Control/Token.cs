@@ -6,6 +6,7 @@ namespace CDNA_SkyDrive.Control
 {
     public class Token
     {
+        public static string s = "[{\"time\": \"2019-10-15\", \"name\": \".\", \"type\": \"dir\", \"data\": []}]";
         public static string GetToken(string s)
         {
             string token = s + DateTime.Now.ToString("yyyyMMddHH");

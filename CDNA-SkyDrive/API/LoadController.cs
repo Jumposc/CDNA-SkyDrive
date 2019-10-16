@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using CDNA_SkyDrive.Control;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using CDNA_SkyDrive.Control;
 using CDNA_SkyDrive.Mode;
-using Newtonsoft.Json.Linq;
-using System.Data;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Text;
 
 namespace CDNA_SkyDrive.API
@@ -19,7 +16,8 @@ namespace CDNA_SkyDrive.API
     [ApiController]
     public class LoadController : ControllerBase
     {
-        const string FilePath = "UpLoadFile/";
+        private const string FilePath = "UpLoadFile/";
+
         [HttpPost()]
         [Route("Up")]
         //[DisableFormValueModelBinding]
