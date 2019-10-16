@@ -28,7 +28,7 @@ function BackDir() {
     if (NowPath == "./") {
         return;
     }
-    var path = NowPath.split("/"); 
+    var path = NowPath.split("/");
     path.splice((path.length - 2), 1);
     NowPath = path.join("/");
     GetUserFileList(NowPath);
@@ -51,7 +51,7 @@ function PostFile() {
         }
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "/api/Load/Up", true);
-        xhr.setRequestHeader("Path","./")
+        xhr.setRequestHeader("Path", "./")
         PushBox();
         CreateLoadBox();
         xhr.upload.addEventListener("progress", function (e) {
@@ -112,7 +112,7 @@ function CreateLoadBox() {
         var Ul = document.createElement("ul");
         Ul.className = "load-file-box";
         BoxInfo.appendChild(Ul);
-        var fileinfo = [fileobj[i].name,SizeUnit(fileobj[i].size) , "0%"];
+        var fileinfo = [fileobj[i].name, SizeUnit(fileobj[i].size), "0%"];
         for (j = 0; j < Liname.length; j++) {
             var Li = document.createElement("li");
             Li.className = Liname[j];
@@ -138,7 +138,7 @@ function ClearFileList() {
             Box.removeChild(List[i]);
         }
     }
-    
+
 }
 
 //获取用户文件列表
@@ -195,7 +195,7 @@ function CreateFileDirList(Dir) {
         var Ul = document.createElement("ul");
         Ul.className = "file";
         FileBox.appendChild(Ul);
-        for (j = 0; j < LiName.length;j++) {
+        for (j = 0; j < LiName.length; j++) {
             var Li = document.createElement("li");
             Li.className = LiName[j];
             Ul.appendChild(Li);
@@ -210,28 +210,33 @@ function CreateFileDirList(Dir) {
         var A = document.createElement("a");
         A.innerHTML = "<span>" + Dir[i].name;
         A.name = Dir[i].name;
+        A.style.cursor = "pointer";
         A.onclick = function (a) { GetUserFileList(A.name) };
         DirList[i].appendChild(A);
         var Div = document.createElement("div");
         Div.className = "file-handle";
         Div.style.display = "none";
-        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/rename.png\">"  + "<img src=\"../images/delete.png\">";
+        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/delete.png\">";
         DirList[i].appendChild(Div);
+    }
+    var LiDir = document.querySelectorAll(".file-list-container .file-name-dir");
+    for (i = 0; i < LiDir.length; i++) {
+        LiDir[i].addEventListener("click", function () { GetUserFileList(NowPath + this.children[0].name + "/")})
     }
 }
 //创建文件列表
 function CreateFileList(File) {
     if (File.length > 1) {
-        File = sortByKey(File,"name");
+        File = sortByKey(File, "name");
     }
     var FileBox = document.getElementById("file-list-container");
     var LiName = ["file-name", "file-size", "file-date"];
     for (i = 0; i < File.length; i++) {
-        var FileInfo = [File[i].name,SizeUnit( File[i].size), File[i].time];
+        var FileInfo = [File[i].name, SizeUnit(File[i].size), File[i].time];
         var Ul = document.createElement("ul");
         Ul.className = "file";
         FileBox.appendChild(Ul);
-        for (j = 0; j < LiName.length;j++) {
+        for (j = 0; j < LiName.length; j++) {
             var Li = document.createElement("li");
             Li.className = LiName[j];
             Ul.appendChild(Li);
@@ -242,12 +247,12 @@ function CreateFileList(File) {
 
     }
     var FileLiName = document.getElementsByClassName("file-name");
-    for (i = 0; i < FileLiName.length;i++) {
+    for (i = 0; i < FileLiName.length; i++) {
         var CheckBox = document.createElement("input");
         var Div = document.createElement("div");
         Div.className = "file-handle";
         Div.style.display = "none";
-        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/cp.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/down.png\" id=\""+ File[i].name + "\"" + "onclick=\"Down(this.id)\"" + ">" + "<img src=\"../images/delete.png\">";
+        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/cp.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/down.png\" id=\"" + File[i].name + "\"" + "onclick=\"Down(this.id)\"" + ">" + "<img src=\"../images/delete.png\">";
         CheckBox.type = "checkbox";
         CheckBox.className = "checkbox";
         CheckBox.value = File[i].name;
@@ -257,7 +262,7 @@ function CreateFileList(File) {
     AddEven();
 }
 
-    
+
 //下载文件方法
 function Down(name) {
     var xmlhttp = new XMLHttpRequest();
@@ -295,7 +300,6 @@ function AddEven() {
         evntul[i].addEventListener("mouseover", SetDisplay(han[i], "block"));
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
-    //var LiDir = document.querySelectorAll("");
 }
 //页面加载时，添加事件
 function OnLoadEvn() {
