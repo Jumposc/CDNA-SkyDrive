@@ -38,6 +38,13 @@ namespace CDNA_SkyDrive.API
                 {
                     foreach (var file in files)
                     {
+                        string ID = token.Split("-")[0];
+                        ID = ID.Substring(0, ID.Length - 10);
+                        DataTable table;
+                        if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
+                            throw new NewSqlException();
+                        name = table.Rows[0][1].ToString();
+
                         filestr = null;
                         stream = file.OpenReadStream();
                         byte[] hash = Save_ReadFile.GetHash(stream);
@@ -58,13 +65,6 @@ namespace CDNA_SkyDrive.API
                             fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", blobParameter);
                         }
                         //把Hash绑定到用户文件列表上
-                        string ID = token.Split("-")[0];
-                        ID = ID.Substring(0, ID.Length - 10);
-
-                        DataTable table;
-                        if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
-                            throw new NewSqlException();
-                        name = table.Rows[0][1].ToString();
                         do
                         {
                             table = null;
@@ -76,8 +76,7 @@ namespace CDNA_SkyDrive.API
                         JObject jo = new JObject();
                         Encoding encoding = Encoding.Default;
                         jo.Add("time", DateTime.Now.ToString("yyyy-MM-dd"));
-                        string s = Encoding.UTF8.GetString(Encoding.Default.GetBytes(file.FileName));
-                        jo.Add("name", Encoding.UTF8.GetString(Encoding.Default.GetBytes(file.FileName)));
+                        jo.Add("name", file.FileName);
                         jo.Add("type", "file");
                         jo.Add("size", file.Length);
                         jo.Add("data", fileID);
