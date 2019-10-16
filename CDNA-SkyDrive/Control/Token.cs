@@ -13,7 +13,7 @@ namespace CDNA_SkyDrive.Control
             token += "-" + AES.EncodeAES(token);
             return token;
         }
-        //       
+        //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
         public static bool CheckToken(string s)
         {
             string[] str = s.Split('-');
