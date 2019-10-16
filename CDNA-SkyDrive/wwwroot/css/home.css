@@ -168,7 +168,7 @@
     font-size: 12px;
 }
 
-.file-name-title, .file-name {
+.file-name-title, .file-name, .file-name-dir {
     width: 60%;
 }
 

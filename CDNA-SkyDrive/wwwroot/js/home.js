@@ -120,7 +120,6 @@ function GetFileList(xmlhttp) {
 }
 //将文件列表分类
 function FindFileType(FileList) {
-    var Filebox = document.getElementById("file-list-container");
     var FileDir = JSON.parse("[]");
     var File = JSON.parse("[]");
     for (i in FileList) {
@@ -130,11 +129,51 @@ function FindFileType(FileList) {
             File.push(FileList[i]);
         }
     }
-    CreateFileDirList(File);
+    CreateFileDirList(FileDir);
+    CreateFileList(File);
 }
+
 function CreateFileDirList(Dir) {
-    Dir.sort(function (a, b) { return a.name.localeCompare(b.name) });
+    if (Dir.length > 1) {
+        Dir.sort(function (a, b) { return a.name.localeCompare(b.name) });
+    }
+    var FileBox = document.getElementById("file-list-container");
+    var LiName = ["file-name-dir", "file-size", "file-date"];
+    var DirInfo = [Dir.name, Dir.size, Dir.time];
+    for (i = 0; i < Dir.length;i++) {
+        var Ul = document.createElement("ul");
+        Ul.className = "file";
+        FileBox.appendChild(Ul);
+        for (j = 0; j < LiName.length;j++) {
+            var Li = document.createElement("li");
+            Li.className = LiName[j];
+            Ul.appendChild(Li);
+            var Span = document.createElement("span");
+            Span.value = DirInfo[j];
+            Li.appendChild(Span);
+        }
+
+    }
 }
+function CreateFileList(File) {
+    if (File.length > 1) {
+        File.sort(function (a, b) { return a.name.localeCompare(b.name) });
+    }
+    var FileBox = document.getElementById("file-list-container");
+    var LiName = ["file-name", "file-size", "file-date"];
+    for (i = 0; i < File.length;i++) {
+        var Ul = document.createElement("ul");
+        Ul.className = "file";
+        FileBox.appendChild(Ul);
+        for (j = 0; j < LiName.length;j++) {
+            var Li = document.createElement("li");
+            Li.className = LiName[j];
+            Ul.appendChild(Li);
+        }
+
+    }
+}
+    
 
 function Down() {
     var xmlhttp = new XMLHttpRequest();
