@@ -80,7 +80,7 @@ namespace CDNA_SkyDrive.API
                             jo.Add("data", fileID);
                             JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
-                            if (0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='' where UserName='{name}';") && 0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
+                            if (0 == SQLControl.Execute($"testbase.UserFileTable SET File='' where UserName='{name}';") && 0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
                                 throw new NewSqlException();
                             return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
                         }
