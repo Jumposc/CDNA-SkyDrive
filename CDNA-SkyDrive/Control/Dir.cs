@@ -18,16 +18,15 @@ namespace CDNA_SkyDrive.Control
             return null;
         }
 
-        public static JToken AddDir(JArray jArray, Queue<string> list, JToken adddir)
+        public static JToken AddJson(JArray jArray, Queue<string> list, JToken addJson)
         {
             if (list.Count == 0)
                 return null;
             string name = list.Dequeue();
             if (name == "")
             {
-                JObject q = JObject.Parse(jArray.ToString());
-                q["data"].AddAfterSelf(adddir);
-                return q;
+                jArray.Add(addJson);
+                return jArray;
             }
             for (int i = 0; i < jArray.Count; i++)
             {
@@ -41,16 +40,14 @@ namespace CDNA_SkyDrive.Control
                         if (name == "")
                         {
                             JArray j = JArray.Parse(q["data"].ToString());
-                            j.Add(adddir);
+                            j.Add(addJson);
                             q["data"] = j;
                             return $"[{q}]";
                         }
                         else return null;
                     }
-                    data = data.Substring(1, data.Length - 1);
-                    data = data.Substring(0, data.Length - 1);
                     JToken o = jArray[i];
-                    o["data"] = AddDir(new JArray(data), list, adddir);
+                    o["data"] = AddJson(JArray.Parse(data), list, addJson);
                     jArray[i] = o;
                     return jArray;
                 }
