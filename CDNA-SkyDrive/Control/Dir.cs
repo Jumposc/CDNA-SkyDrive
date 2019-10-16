@@ -10,7 +10,7 @@ namespace CDNA_SkyDrive.Control
             if (list.Count == 0)
                 return null;
             string name = list.Dequeue();
-            if (name == "")
+            if (list.Count == 0)
                 return jToken;
             foreach (var item in jToken)
                 if (item["type"].ToString() == "dir" && item["name"].ToString() == name)
