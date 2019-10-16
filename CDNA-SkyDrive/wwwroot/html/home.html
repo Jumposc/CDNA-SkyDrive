@@ -6,13 +6,12 @@
     <script type="text/javascript" src="../js/home.js"></script>
     <link href="../css/home.css" type="text/css" rel="stylesheet" />
     <style>
-
     </style>
 </head>
 <body onload="OnLoadEvn()">
     <div class="head">
         <a class="logo" href="home.html">
-            <img src="../images/logo.png" height="18%" width="18%"/>
+            <img src="../images/logo.png" height="18%" width="18%" />
         </a>
         <div class="user-info">
             <span class="user-img-container"></span>
@@ -21,7 +20,7 @@
     </div>
     <div class="type">
         <ul class="type-ul">
-            <li class="type-all" >
+            <li class="type-all">
                 <span>全部</span>
             </li>
             <li class="type-dosc">
@@ -48,7 +47,7 @@
             <div id="upload-box">
                 <a class="input-btn" href="#" title="上传">
                     <span class="input-text">上传</span>
-                    <form enctype="multipart/form-data"  method="post" class="input-form" id="input-form" >
+                    <form enctype="multipart/form-data" method="post" class="input-form" id="input-form">
                         <input class="input-file" type="file" name="上传" id="input-file" multiple />
                     </form>
                 </a>
@@ -69,52 +68,53 @@
                 <li class="file-date-title"><span>修改时间</span></li>
             </ul>
         </div>
-        <div class="file-list-container">
-            <div class="file-info">
-                <ul class="file" >
-                    <li class="file-name">
-                        <input type="checkbox" class="checkbox" />
+        <div class="file-list-container" id="file-list-container">
+            <ul class="file">
+                <li class="file-name">
+                    <input type="checkbox" class="checkbox" />
+                    <a>
                         <span>
                             claris.mp4
                         </span>
-                        <div class="file-handle">
-                            <img src="../images/mv.png">
-                            <img src="../images/cp.png">
-                            <img src="../images/rename.png">
-                            <img src="../images/down.png">
-                            <img src="../images/delete.png">
-                        </div>
-                    </li>
-                    <li class="file-size">
-                        <span>
-                            9.9M
-                        </span>
-                    </li>
-                    <li class="file-date">
-                        <span>
-                            2019-10-9
-                        </span>
-                    </li>
-                </ul>
-                <ul class="file">
-                    <li class="file-name">
-                        <input type="checkbox" class="checkbox" />
-                        <span>
-                            java学习资料
-                        </span>
-                    </li>
-                    <li class="file-size">
-                        <span>
-                            9.9M
-                        </span>
-                    </li>
-                    <li class="file-date">
-                        <span>
-                            2019-10-9
-                        </span>
-                    </li>
-                </ul>
-            </div>
+                    </a>
+                    <div class="file-handle">
+                        <img src="../images/mv.png">
+                        <img src="../images/cp.png">
+                        <img src="../images/rename.png">
+                        <img src="../images/down.png">
+                        <img src="../images/delete.png">
+                    </div>
+                </li>
+                <li class="file-size">
+                    <span>
+                        9.9M
+                    </span>
+                </li>
+                <li class="file-date">
+                    <span>
+                        2019-10-9
+                    </span>
+                </li>
+            </ul>
+            <ul class="file">
+                <li class="file-name">
+                    <input type="checkbox" class="checkbox" />
+                    <span>
+                        java学习资料
+                    </span>
+                </li>
+                <li class="file-size">
+                    <span>
+                        9.9M
+                    </span>
+                </li>
+                <li class="file-date">
+                    <span>
+                        2019-10-9
+                    </span>
+                </li>
+            </ul>
+
         </div>
         <div class="load-box" id="load-box">
             <div class="load-head" id="load-box">
@@ -135,5 +135,5 @@
     </div>
 
 
-        </body>
+</body>
 </html>

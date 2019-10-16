@@ -106,12 +106,21 @@ function GetUserFileList(path) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/api/List");
     xmlhttp.send(path);
+    
+    xmlhttp.onreadystatechange = GetFileList(xmlhttp);
+}
+function GetFileList(xmlhttp) {
+    return function () {
+        if (xmlhttp.status == 200) {
+            var FileList = JSON.parse(JSON.parse(xmlhttp.responseText).Data);
+            AddFileList(FileList);
+        }
+    }
+}
+//将列表填充进页面
+function AddFileList(FileList) {
 
 }
-function AddFileList() {
-
-}
-
 
 //页面加载时，添加事件
 function OnLoadEvn() {
