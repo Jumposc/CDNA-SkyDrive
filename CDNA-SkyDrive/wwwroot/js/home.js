@@ -114,18 +114,38 @@ function GetFileList(xmlhttp) {
     return function () {
         if (xmlhttp.status == 200) {
             var FileList = JSON.parse(JSON.parse(xmlhttp.responseText).Data);
-            AddFileList(FileList);
+            FindFileType(FileList);
         }
     }
 }
-//将列表填充进页面
-function AddFileList(FileList) {
-
+//将文件列表分类
+function FindFileType(FileList) {
+    var Filebox = document.getElementById("file-list-container");
+    var FileDir = JSON.parse("[]");
+    var File = JSON.parse("[]");
+    for (i in FileList) {
+        if (FileList[i].type == "dir") {
+            FileDir.push(FileList[i]);
+        } else {
+            File.push(FileList[i]);
+        }
+    }
+    CreateFileDirList(File);
+}
+function CreateFileDirList(Dir) {
+    Dir.sort(function (a, b) { return a.name.localeCompare(b.name) });
 }
 
+function Down() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/Load/Down");
+    xmlhttp.send();
+
+}
 //页面加载时，添加事件
 function OnLoadEvn() {
     GetUserFileList("./");
+    Down();
     var li = document.querySelectorAll(".type-ul li");
     for (i = 0; i < li.length; i++) {
         li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
