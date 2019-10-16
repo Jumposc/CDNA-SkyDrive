@@ -28,24 +28,6 @@ namespace CDNA_SkyDrive.API
             string[] p = Request.Headers["Path"].ToString().Split('/');
             //string[] p = "./A/".Split('/');
             var files = Request.Form.Files;
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
             if (Token.CheckToken(token) && files != null)
             {
                 Stream stream = null;
@@ -74,6 +56,8 @@ namespace CDNA_SkyDrive.API
                         if (-1 == (fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)))
                         {//没有就加进去
                             string filename = DateTime.Now.ToString("yyyyMMddhhmmss");
+                            while (System.IO.File.Exists(FilePath + filename))
+                            { filename = DateTime.Now.ToString("yyyyMMddhhmmss") + new Random().Next(10); }
                             if (!Save_ReadFile.SaveFile(FilePath + filename, file))
                                 throw new IOException();
                             MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
