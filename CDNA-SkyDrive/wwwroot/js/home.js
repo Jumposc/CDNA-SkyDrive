@@ -107,12 +107,11 @@ function GetUserFileList(path) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", "/api/List");
     xmlhttp.send(path);
-
     xmlhttp.onreadystatechange = GetFileList(xmlhttp);
 }
 function GetFileList(xmlhttp) {
     return function () {
-        if (xmlhttp.status == 200) {
+        if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
             var FileList = JSON.parse(JSON.parse(xmlhttp.responseText).Data);
             FindFileType(FileList);
         }
@@ -135,12 +134,12 @@ function FindFileType(FileList) {
 
 function CreateFileDirList(Dir) {
     if (Dir.length > 1) {
-        Dir.sort(function (a, b) { return a.name.localeCompare(b.name) });
+        Dir = sortByKey(Dir, "name");
     }
     var FileBox = document.getElementById("file-list-container");
     var LiName = ["file-name-dir", "file-size", "file-date"];
-    var DirInfo = [Dir.name, Dir.size, Dir.time];
-    for (i = 0; i < Dir.length;i++) {
+    for (i = 0; i < Dir.length; i++) {
+        var DirInfo = [Dir[i].name, Dir[i].size, Dir[i].time];
         var Ul = document.createElement("ul");
         Ul.className = "file";
         FileBox.appendChild(Ul);
@@ -149,7 +148,7 @@ function CreateFileDirList(Dir) {
             Li.className = LiName[j];
             Ul.appendChild(Li);
             var Span = document.createElement("span");
-            Span.value = DirInfo[j];
+            Span.innerHTML = DirInfo[j];
             Li.appendChild(Span);
         }
 
@@ -157,11 +156,12 @@ function CreateFileDirList(Dir) {
 }
 function CreateFileList(File) {
     if (File.length > 1) {
-        File.sort(function (a, b) { return a.name.localeCompare(b.name) });
+        File = sortByKey(File,"name");
     }
     var FileBox = document.getElementById("file-list-container");
     var LiName = ["file-name", "file-size", "file-date"];
-    for (i = 0; i < File.length;i++) {
+    for (i = 0; i < File.length; i++) {
+        var FileInfo = [File[i].name, File[i].size, File[i].time];
         var Ul = document.createElement("ul");
         Ul.className = "file";
         FileBox.appendChild(Ul);
@@ -169,9 +169,18 @@ function CreateFileList(File) {
             var Li = document.createElement("li");
             Li.className = LiName[j];
             Ul.appendChild(Li);
+            var Span = document.createElement("span");
+            Span.innerHTML = FileInfo[j];
+            Li.appendChild(Span);
         }
 
     }
+}
+function sortByKey(array, key) {
+    return array.sort(function (a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
 }
     
 
@@ -180,19 +189,17 @@ function Down() {
     xmlhttp.open("POST", "/api/Load/Down", true);
     xmlhttp.responseType = "blob";
     xmlhttp.onreadystatechange = function (data) {
+        if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
         var content = xmlhttp.response;
-
         var elink = document.createElement('a');
         elink.download = "123.txt";
         elink.style.display = 'none';
-
         var blob = new Blob([content]);
         elink.href = URL.createObjectURL(blob);
-
         document.body.appendChild(elink);
         elink.click();
-
         document.body.removeChild(elink);
+        }
     };
     xmlhttp.send();
 
@@ -200,7 +207,7 @@ function Down() {
 //页面加载时，添加事件
 function OnLoadEvn() {
     GetUserFileList("./");
-    Down();
+    //Down();
     var li = document.querySelectorAll(".type-ul li");
     for (i = 0; i < li.length; i++) {
         li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));

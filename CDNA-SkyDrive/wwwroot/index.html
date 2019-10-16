@@ -27,7 +27,7 @@
         <div class="input">
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">账号</span>
-                <input type="text" class="form-control" placeholder="Username" id="input-user" aria-describedby="basic-addon1"  onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"  autofocus>
+                <input type="text" class="form-control" placeholder="Username" id="input-user" aria-describedby="basic-addon1" onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;" autofocus>
             </div>
             <div class="input-group">
                 <span class="input-group-addon" id="basic-addon1">密码</span>
@@ -42,6 +42,15 @@
         <br />
         <a class="info-text" href="https://github.com/jumpo666/CDNA-SkyDrive">GitHub仓库地址:关于</a>
     </div>
-
+    <script type="text/javascript">
+        document.onkeyup = function (e) {
+            var event = e || window.event;
+            var key = event.which || event.keyCode || event.charCode;
+            if (key == 13) {
+                var login = document.getElementById("login-btn");
+                login.click();
+            }
+        }
+    </script>
 </body>
 </html>
