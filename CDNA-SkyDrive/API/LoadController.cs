@@ -80,9 +80,8 @@ namespace CDNA_SkyDrive.API
                             jo.Add("data", fileID);
                             JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
-                            if (0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='' where UserName='{name}';") && 0 == SQLControl.Execute($"SET NAMES gbk; UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
+                            if (0 == SQLControl.Execute($"testbase.UserFileTable SET File='' where UserName='{name}';") && 0 == SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{newdir.ToString()}' where UserName='{name}';"))
                                 throw new NewSqlException();
-                            return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
                         }
                     }
                     catch (IOException)
@@ -100,38 +99,38 @@ namespace CDNA_SkyDrive.API
                 }
                 else
                     return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
-                return Ok("程序运行完成");
+                return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "保存完成！", Message = "OK" }));
             }));
 
         }
 
         [HttpPost()]
         [Route("Down")]
-        public async Task<IActionResult> DownLoad()
+        public IActionResult DownLoad()
         {
-            return await Task.Run(() =>
+            string token = Request.Cookies["Token"];
+            //string[] p = Request.Headers["Path"].ToString().Split('/');
+            string[] p = "./ALL01UMD.sav".Split('/');
+            if (Token.CheckToken(token))
             {
-                string token = Request.Cookies["Token"];
-                //string[] p = Request.Headers["Path"].ToString().Split('/');
-                string[] p = "./A/B".Split('/');
-                if (Token.CheckToken(token))
-                {
-                    string ID = token.Split("-")[0];
-                    ID = ID.Substring(0, ID.Length - 10);
-                    DataTable table;
-                    if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
-                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
-                    string name = table.Rows[0][1].ToString();
-                    if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
-                        return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
-                    JToken file = JToken.Parse(table.Rows[0][1].ToString());
-                    Queue<string> pathlist = new Queue<string>(p);
-                    JToken nowdir = Dir.Intodir(file, pathlist);
-                    return Ok("");
-                }
-                else
-                    return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
-            });
+                string ID = token.Split("-")[0];
+                ID = ID.Substring(0, ID.Length - 10);
+                DataTable table;
+                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
+                    return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                string name = table.Rows[0][1].ToString();
+                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
+                    return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                JToken file = JToken.Parse(table.Rows[0][1].ToString());
+                Queue<string> pathlist = new Queue<string>(p);
+                JToken nowdir = Dir.Intodir(file, pathlist);
+                if ((table = SQLControl.Select($"SELECT * FROM testbase.HashTable where ID={nowdir["data"]};")) == null)
+                    return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
+                string filepath = table.Rows[0][2].ToString();
+                return File(new FileStream(filepath, FileMode.Open), "application/octet-stream", p[p.Length - 1]);
+            }
+            else
+                return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
         }
     }
 }

@@ -17,16 +17,6 @@ namespace CDNA_SkyDrive.Control
             return true;
         }
 
-        public static bool AddFile(string filepath, IFormFile file)
-        {
-            return false;
-        }
-
-        public static bool ReadFile()
-        {
-            return false;
-        }
-
         public static byte[] GetHash(Stream file)
         {
             file.Seek(0, SeekOrigin.Begin);
