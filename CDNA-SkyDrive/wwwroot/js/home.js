@@ -56,7 +56,7 @@ function PostFile() {
         })
         xhr.send(form);
         xhr.onreadystatechange = function () {
-            if (xhr.status == 200) {
+            if (xhr.status == 200 && xhr.readyState == 4) {
                 for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传成功";
                 }
@@ -131,7 +131,7 @@ function FindFileType(FileList) {
     CreateFileDirList(FileDir);
     CreateFileList(File);
 }
-
+//创建目录列表
 function CreateFileDirList(Dir) {
     if (Dir.length > 1) {
         Dir = sortByKey(Dir, "name");
@@ -151,9 +151,9 @@ function CreateFileDirList(Dir) {
             Span.innerHTML = DirInfo[j];
             Li.appendChild(Span);
         }
-
     }
 }
+//创建文件列表
 function CreateFileList(File) {
     if (File.length > 1) {
         File = sortByKey(File,"name");
@@ -174,6 +174,18 @@ function CreateFileList(File) {
             Li.appendChild(Span);
         }
 
+    }
+    var LiName = document.getElementsByClassName("file-name");
+    for (i = 0; i < LiName.length;i++) {
+        var CheckBox = document.createElement("input");
+        var Div = document.createElement("div");
+        Div.className = "file-handle";
+        Div.innerHTML = "<img src=\"../images/mv.png\">" + "<img src=\"../images/cp.png\">" + "<img src=\"../images/rename.png\">" + "<img src=\"../images/down.png\">" + "<img src=\"../images/delete.png\">";
+        CheckBox.type = "checkbox";
+        CheckBox.className = "checkbox";
+        CheckBox.value = File[i].name;
+        LiName[i].appendChild(CheckBox);
+        LiName[i].appendChild(Div);
     }
 }
 function sortByKey(array, key) {

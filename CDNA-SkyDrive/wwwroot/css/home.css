@@ -204,6 +204,9 @@
     right: 20px;
     top: 5px;
 }
+.file-handle img{
+    margin:2px;
+}
 
 .load-box {
     position: absolute;
@@ -258,6 +261,9 @@
 
 .load-info-title-name, .load-file-name {
     width: 200px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .load-info-title-size, .load-file-size {
@@ -288,6 +294,7 @@
         position: relative;
         left: 20px;
         top: 5px;
+        height:25px;
     }
 
 .load-file {
