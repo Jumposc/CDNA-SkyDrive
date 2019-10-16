@@ -114,8 +114,8 @@ namespace CDNA_SkyDrive.API
         public IActionResult DownLoad()
         {
             string token = Request.Cookies["Token"];
-            //string[] p = Request.Headers["Path"].ToString().Split('/');
-            string[] p = "./ALL01UMD.sav".Split('/');
+            string[] p = Request.Headers["Path"].ToString().Split('/');
+            //string[] p = "./ALL01UMD.sav".Split('/');
             if (Token.CheckToken(token))
             {
                 string ID = token.Split("-")[0];
