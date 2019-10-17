@@ -30,7 +30,7 @@ namespace CDNA_SkyDrive.Control
             if (name == "")
             {
                 jArray.Add(addJson);
-                return jArray;
+                return jArray;//
             }
             for (int i = 0; i < jArray.Count; i++)
             {
