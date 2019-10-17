@@ -7,6 +7,7 @@ body {
     background-image: url(../images/backgroud.jpg);
     background-repeat: no-repeat;
     background-size: cover;
+    overflow:hidden;
 }
 
 .login-group {
@@ -18,7 +19,7 @@ body {
     padding: 120px 190px;
     transform: translateX(-65%) translateY(-40%);
 }
-//
+
 #login-btn {
     position: fixed;
     left: 90px;
