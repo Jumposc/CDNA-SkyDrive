@@ -18,7 +18,7 @@
     right: 150px;
     top: 10px;
     color: white;
-    width:230px;
+    width: 230px;
 }
 
 .logo {
@@ -28,10 +28,15 @@
 }
 
 #user-head-name {
-    position:absolute;
+    position: absolute;
     top: 20px;
     padding-left: 8px;
     font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 178px;
+    display: inline-block;
 }
 
 .user-img-container {
@@ -100,15 +105,15 @@
     left: 200px;
 }
 
-.action-bar button {
-    position:relative;
-    top:-13px;
-    border: 1px solid #4fb2b8;
-    border-radius: 5px;
-    background-color: white;
-    font-size: 20px;
-    margin: 5px;
-}
+    .action-bar button {
+        position: relative;
+        top: -13px;
+        border: 1px solid #4fb2b8;
+        border-radius: 5px;
+        background-color: white;
+        font-size: 20px;
+        margin: 5px;
+    }
 
 .action-btn {
     position: absolute;
@@ -154,19 +159,19 @@
     margin: 0px;
 }
 
-.file-info-container li, .file li {
-    height: 30px;
-    float: left;
-    border-bottom: 1px solid rgba(128, 128, 128,0.2);
-    position: relative;
-}
+    .file-info-container li, .file li {
+        height: 30px;
+        float: left;
+        border-bottom: 1px solid rgba(128, 128, 128,0.2);
+        position: relative;
+    }
 
-.file-info-container li span, .file li span {
-    position: absolute;
-    top: 5px;
-    left: 40%;
-    font-size: 12px;
-}
+        .file-info-container li span, .file li span {
+            position: absolute;
+            top: 5px;
+            left: 40%;
+            font-size: 12px;
+        }
 
 .file-name-title, .file-name, .file-name-dir {
     width: 60%;
@@ -185,7 +190,7 @@
     top: 181px;
     width: 88%;
     height: 75%;
-    overflow:scroll;
+    overflow: scroll;
 }
 
 .file li span {
@@ -199,15 +204,17 @@
     left: 20px;
     top: 5px;
 }
+
 .file-handle {
     position: absolute;
     right: 20px;
     top: 5px;
 }
-.file-handle img{
-    margin:2px;
-    cursor:pointer;
-}
+
+    .file-handle img {
+        margin: 2px;
+        cursor: pointer;
+    }
 
 .load-box {
     position: absolute;
@@ -226,11 +233,11 @@
     height: 24px;
 }
 
-.load-head h3 {
-    margin-top: 8px;
-    margin-left: 8px;
-    margin-bottom: 0px;
-}
+    .load-head h3 {
+        margin-top: 8px;
+        margin-left: 8px;
+        margin-bottom: 0px;
+    }
 
 .load-close {
     position: absolute;
@@ -251,20 +258,20 @@
     border-bottom: 1px solid #808080;
 }
 
-.load-info-title-box ul, .load-file ul {
-    width: 500px;
-    height: 25px;
-    margin: 0px;
-    padding: 0px;
-    height: 25px;
-    display:block;
-}
+    .load-info-title-box ul, .load-file ul {
+        width: 500px;
+        height: 25px;
+        margin: 0px;
+        padding: 0px;
+        height: 25px;
+        display: block;
+    }
 
 .load-info-title-name, .load-file-name {
     width: 200px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .load-info-title-size, .load-file-size {
@@ -274,10 +281,12 @@
 .load-info-title-statusm, .load-file-status {
     width: 140px;
 }
+
 .load-file-status {
     border: solid 1px #4cff00;
     border-radius: 2px;
 }
+
 .load-file-status-box {
     background-color: #34d432;
     display: inline-block;
@@ -295,14 +304,14 @@
         position: relative;
         left: 20px;
         top: 5px;
-        height:25px;
+        height: 25px;
     }
 
 .load-file {
     width: 500px;
     height: 300px;
-    overflow:scroll;
-    overflow-x:hidden;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .load-close {
@@ -351,6 +360,7 @@
     cursor: pointer;
     opacity: 0;
 }
+
 #back-bnt {
     border-radius: 20px;
     position: relative;
@@ -359,4 +369,29 @@
     padding-right: 20px;
     border: 1px solid;
     top: 2px;
+}
+
+.down-btn {
+    position: absolute;
+    top: 30px;
+    right: 100px;
+    height: 0px;
+    width: 0px;
+    border: 10px solid transparent;
+    border-bottom-color: white;
+    margin: 0px;
+    transition: 0.5s;
+    -moz-transition: -moz-transform 0.5s;
+    -webkit-transition: -webkit-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    transform-origin: 50% 80%;
+}
+
+.down-btn:hover{
+    transform-origin:50% 80%;
+    -moz-transform:rotateZ(180deg);
+    -webkit-transform:rotateZ(180deg);
+    -o-transform:rotateZ(180deg);
+    transform:rotateZ(180deg);
+    filter:FlipV;
 }
