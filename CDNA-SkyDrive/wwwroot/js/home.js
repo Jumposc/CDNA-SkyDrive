@@ -290,11 +290,11 @@ function Down(name) {
 }
 //添加列表动态样式
 function AddEven() {
-    var ul = document.querySelectorAll(".file-list-container ul,.file-info-container li");
-    for (i = 0; i < ul.length; i++) {
-        ul[i].addEventListener("mouseover", ChangeBackground(ul[i], "rgba(128,128,128,0.5)"));
-        ul[i].addEventListener("mouseout", ChangeBackground(ul[i], "rgb(255,255,255)"));
-    }
+    //var ul = document.querySelectorAll(".file-list-container ul,.file-info-container li");
+    //for (i = 0; i < ul.length; i++) {
+    //    ul[i].addEventListener("mouseover", ChangeBackground(ul[i], "rgba(128,128,128,0.5)"));
+    //    ul[i].addEventListener("mouseout", ChangeBackground(ul[i], "rgb(255,255,255)"));
+    //}
     var evntul = document.querySelectorAll(".file-list-container ul");
     var han = document.querySelectorAll(".file-handle");
     for (i = 0; i < evntul.length; i++) {
@@ -306,11 +306,11 @@ function AddEven() {
 function OnLoadEvn() {
     GetUserFileList(NowPath);
     //Down();
-    var li = document.querySelectorAll(".type-ul li");
-    for (i = 0; i < li.length; i++) {
-        li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
-        li[i].addEventListener("mouseout", ChangeBackground(li[i], "rgb(248,248,248)"));
-    }
+    //var li = document.querySelectorAll(".type-ul li");
+    //for (i = 0; i < li.length; i++) {
+    //    li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
+    //    li[i].addEventListener("mouseout", ChangeBackground(li[i], "rgb(248,248,248)"));
+    //}
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
     var loadbox = document.getElementById("load-box");

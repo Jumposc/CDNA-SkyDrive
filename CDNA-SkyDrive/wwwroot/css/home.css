@@ -66,10 +66,16 @@
     padding: 0px;
 }
 
-    .type-ul li {
-        padding: 10px 0px;
-        cursor: pointer;
-    }
+.type-ul li {
+    padding: 10px 0px;
+    cursor: pointer;
+}
+
+.type-ul li:hover {
+    background-color: rgba(128,128,128,0.5)
+}
+
+
 
 .percent {
     position: fixed;
@@ -191,10 +197,14 @@
     width: 88%;
     height: 75%;
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 .file li span {
     font-size: 15px;
+}
+.file-list-container ul:hover, .file-info-container li:hover {
+    background-color: rgba(128,128,128,0.5);
 }
 
 .checkbox {
@@ -387,11 +397,11 @@
     transform-origin: 50% 80%;
 }
 
-.down-btn:hover{
-    transform-origin:50% 80%;
-    -moz-transform:rotateZ(180deg);
-    -webkit-transform:rotateZ(180deg);
-    -o-transform:rotateZ(180deg);
-    transform:rotateZ(180deg);
-    filter:FlipV;
-}
+    .down-btn:hover {
+        transform-origin: 50% 80%;
+        -moz-transform: rotateZ(180deg);
+        -webkit-transform: rotateZ(180deg);
+        -o-transform: rotateZ(180deg);
+        transform: rotateZ(180deg);
+        filter: FlipV;
+    }
