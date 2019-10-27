@@ -6,6 +6,86 @@
     <script type="text/javascript" src="../js/home.js"></script>
     <link href="../css/home.css" type="text/css" rel="stylesheet" />
     <link rel="icon" href="data:;base64,=">
+    <style>
+        .user-controller {
+            width: 250px;
+            height: 195px;
+            position: absolute;
+            background: #ffffff;
+            top: 90px;
+            right: 140px;
+            border: solid 1px #3190f9;
+            border-radius: 10px;
+            z-index: 2;
+            box-shadow: 0 0 10px #ccc;
+            background-color: white;
+        }
+
+        .triangle {
+            position: absolute;
+            top: -20px;
+            left: 40px;
+            height: 0px;
+            border: 10px solid transparent;
+            border-bottom-color: #3190f9;
+        }
+
+        .user-controller-img {
+            display: inline-block;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            border: 1px solid white;
+            background-image: url(../images/def.jpg);
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        .user-controller-name {
+            padding-left: 8px;
+            font-size: 18px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 150px;
+            display: inline-block;
+            position: absolute;
+            top: 38px;
+            left: 75px;
+            color: white;
+        }
+
+        .user-controller-info {
+            background: #3190f9;
+            border-radius: 10px;
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            width: 250px;
+            height: 100px;
+        }
+
+        .controller-list {
+            list-style: none;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .controller-list li {
+            text-align: center;
+            font-size: 16px;
+            padding: 5px;
+            border-bottom: 1px solid #3190f9;
+        }
+
+        #exit-login {
+            border-bottom:none;
+        }
+        .user-controller,.user-controller div,.user-controller ul{
+            display:none;
+        }
+    </style>
 </head>
 <body onload="OnLoadEvn()">
     <header class="head">
@@ -15,22 +95,22 @@
         <div class="user-info">
             <span class="user-img-container"></span>
             <span id="user-head-name">啧啧啧哈哈哈哈哈哈哈</span>
-        </div>
-        <div class="down-btn">
-        </div>
-        <div>
-            <div class="swz"></div>
-            <div>
-                <span></span>
-                <span></span>
+            <div class="down-btn">
             </div>
-            <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
         </div>
     </header>
+    <div class="user-controller">
+        <div class="triangle"></div>
+        <div class="user-controller-info">
+            <span class="user-controller-img"></span>
+            <span class="user-controller-name">啧啧啧哈哈哈哈哈哈哈</span>
+        </div>
+        <ul class="controller-list">
+            <li>更换头像</li>
+            <li>修改密码</li>
+            <li id="exit-login">退出登陆</li>
+        </ul>
+    </div>
     <aside class="type">
         <ul class="type-ul">
             <li class="type-all">
