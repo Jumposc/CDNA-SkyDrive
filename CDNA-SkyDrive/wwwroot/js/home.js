@@ -39,7 +39,6 @@ function LoadBoxClose() {
     for (i = 0; i < CloseHTML.length; i++) {
         CloseHTML[i].style.display = "none";
     }
-
 }
 //上传文件
 function PostFile() {
@@ -102,7 +101,6 @@ function PushBox() {
     for (i = 0; i < box.length; i++) {
         box[i].style.display = "block";
     }
-
 }
 //创建上传窗体
 function CreateLoadBox() {
@@ -122,7 +120,6 @@ function CreateLoadBox() {
             Ul.appendChild(Li);
             Li.appendChild(SpBox);
         }
-
     }
 }
 //清楚用户当前列表
@@ -138,7 +135,6 @@ function ClearFileList() {
             Box.removeChild(List[i]);
         }
     }
-
 }
 
 //获取用户文件列表
@@ -245,7 +241,6 @@ function CreateFileList(File) {
             Span.innerHTML = FileInfo[j];
             Li.appendChild(Span);
         }
-
     }
     var FileLiName = document.getElementsByClassName("file-name");
     for (i = 0; i < FileLiName.length; i++) {
@@ -262,7 +257,6 @@ function CreateFileList(File) {
     }
     AddEven();
 }
-
 
 //下载文件方法
 function Down(name) {
@@ -286,7 +280,6 @@ function Down(name) {
         }
     };
     xmlhttp.send();
-
 }
 //添加列表动态样式
 function AddEven() {
@@ -346,5 +339,4 @@ function OnLoadEvn() {
         isdown = false;
         loadbox.style.cursor = 'default';
     }
-
 }

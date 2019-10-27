@@ -6,6 +6,7 @@ namespace CDNA_SkyDrive.Control
     public class SQLControl
     {
         public static MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
+
         public static DataTable Select(string CommandText)
         {
             DataTable table = null;
@@ -27,6 +28,7 @@ namespace CDNA_SkyDrive.Control
             }
             return table;
         }
+
         public static int Select(string CommandText, params MySqlParameter[] parameter)
         {
             int i = -1;

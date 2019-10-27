@@ -55,7 +55,6 @@ namespace CDNA_SkyDrive.Control
                     jArray[i] = o;
                     return jArray;
                 }
-
             }
             return null;
         }
