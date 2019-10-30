@@ -83,6 +83,7 @@ function PostFile() {
                 for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传成功";
                 }
+                GetUserFileList(NowPath);
             } else {
                 for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传失败";
