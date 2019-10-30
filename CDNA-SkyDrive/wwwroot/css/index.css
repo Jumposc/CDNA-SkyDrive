@@ -13,29 +13,30 @@ body {
 .login-group {
     border: 2px solid rgba(255, 255, 255,0.5);
     border-radius: 30px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 120px 190px;
-    transform: translateX(-65%) translateY(-40%);
+    position: relative;
+    top: 30%;
+    left: 38%;
+    width: 380px;
+    height: 280px;
+    margin: 0px;
 }
 
 #login-btn {
-    position: fixed;
-    left: 90px;
-    bottom: 20px;
+    position: absolute;
+    left: 30px;
+    top: 20px;
 }
 
 #reg-btn {
-    position: fixed;
-    right: 70px;
-    bottom: 20px;
+    position: absolute;
+    right: 40px;
+    top: 20px;
 }
 
 .login-text {
-    position: fixed;
-    top: 20px;
-    left: 20px;
+    position: absolute;
+    top: 30px;
+    left: 50px;
     color: white;
 }
 
@@ -45,10 +46,9 @@ body {
 }
 
 .input {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-45%) translateY(-60%);
+    position: absolute;
+    top: 80px;
+    left: 40px;
 }
 
 .head {
@@ -66,21 +66,30 @@ body {
 }
 
 .info {
-    position: absolute;
-    left: 50%;
+    position: fixed;
+    left: 43%;
     bottom: 30px;
-    transform: translateX(-25%);
+    width: 200px;
+    height: 50px;
+    text-align: center;
 }
 
 .info-text {
-    position: fixed;
-    transform: translateX(-50px);
     color: white;
 }
-#login-error-info{
-    position:absolute;
-    top:20px;
-    right:30px;
-    color:red;
-    display:none;
+#login-error-info {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    color: red;
+    display: none;
+}
+#btn-group {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 350px;
+    height: 50px;
 }

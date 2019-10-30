@@ -125,7 +125,7 @@ function CreateLoadBox() {
 
     }
 }
-//清楚用户当前列表
+//清除用户当前列表
 function ClearFileList() {
     var Box = document.getElementById("file-list-container");
     var List = document.querySelectorAll(".file-list-container ul");
@@ -207,11 +207,18 @@ function CreateFileDirList(Dir) {
     var DirList = document.getElementsByClassName("file-name-dir");
     for (i = 0; i < DirList.length; i++) {
         DirList[i].innerHTML = "";
+        var CheckBox = document.createElement("input");
+        CheckBox.type = "checkbox";
+        CheckBox.className = "checkbox";
+        CheckBox.value = Dir[i].name;
+        DirList[i].appendChild(CheckBox);
         var A = document.createElement("a");
         A.innerHTML = "<span>" + Dir[i].name;
         A.name = Dir[i].name;
+        A.style.display = "block";
+        A.style.height = "100%";
         A.style.cursor = "pointer";
-        A.onclick = function (a) { GetUserFileList(A.name) };
+        A.onclick = function (a) { GetUserFileList(this.name) };
         DirList[i].appendChild(A);
         var Div = document.createElement("div");
         Div.className = "file-handle";
@@ -222,7 +229,6 @@ function CreateFileDirList(Dir) {
     var LiDir = document.querySelectorAll(".file-list-container .file-name-dir");
     for (i = 0; i < LiDir.length; i++) {
         LiDir[i].style.cursor = "pointer";
-        LiDir[i].addEventListener("click", function () { GetUserFileList(this.children[0].name)})
     }
 }
 //创建文件列表
@@ -288,13 +294,40 @@ function Down(name) {
     xmlhttp.send();
 
 }
+//多个下载
+function LoopDown() {
+    var checkbox = document.querySelectorAll(".checkbox:checked");
+    for (i = 0; i < checkbox.length; i++) {
+        Down(checkbox[i].value);
+    }
+}
+//新建文件夹
+function AddDir(name) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/api/Load/AddDir", true);
+    xmlhttp.setRequestHeader("Path", NowPath);
+    xmlhttp.setRequestHeader("DirName", name);
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+            GetUserFileList(NowPath);
+        } else {
+            window.alert("新建文件夹错误");
+        }
+    }
+    xmlhttp.send();
+}
+//新建一个输入列表
+function NewDir() {
+    var Ul = document.createElement("ul");
+    Ul.className = "file";
+    var LiName = ["file-name", "file-size", "file-date"];
+    for (i = 0; i < LiName.length; i++) {
+        var Li = document.createElement("li");
+        Li.className = LiName[i];
+    }
+}
 //添加列表动态样式
 function AddEven() {
-    //var ul = document.querySelectorAll(".file-list-container ul,.file-info-container li");
-    //for (i = 0; i < ul.length; i++) {
-    //    ul[i].addEventListener("mouseover", ChangeBackground(ul[i], "rgba(128,128,128,0.5)"));
-    //    ul[i].addEventListener("mouseout", ChangeBackground(ul[i], "rgb(255,255,255)"));
-    //}
     var evntul = document.querySelectorAll(".file-list-container ul");
     var han = document.querySelectorAll(".file-handle");
     for (i = 0; i < evntul.length; i++) {
@@ -302,15 +335,10 @@ function AddEven() {
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
 }
+
 //页面加载时，添加事件
 function OnLoadEvn() {
     GetUserFileList(NowPath);
-    //Down();
-    //var li = document.querySelectorAll(".type-ul li");
-    //for (i = 0; i < li.length; i++) {
-    //    li[i].addEventListener("mouseover", ChangeBackground(li[i], "rgba(128,128,128,0.5)"));
-    //    li[i].addEventListener("mouseout", ChangeBackground(li[i], "rgb(248,248,248)"));
-    //}
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
     var loadbox = document.getElementById("load-box");
