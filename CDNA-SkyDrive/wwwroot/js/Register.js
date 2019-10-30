@@ -19,7 +19,6 @@
         xhttp.open("POST", "/api/Register");
         xhttp.send(JSON.stringify(RegisterInfo));
         CheckReg();
-    
 }
 var timeout = 0;
 function CheckReg() {
