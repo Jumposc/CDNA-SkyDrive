@@ -5,10 +5,9 @@ namespace CDNA_SkyDrive.Control
 {
     public class SQLControl
     {
-        public static MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
-
         public static DataTable Select(string CommandText)
         {
+            MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
             DataTable table = null;
             MySqlDataAdapter adapter = null;
             try
@@ -31,6 +30,7 @@ namespace CDNA_SkyDrive.Control
 
         public static int Select(string CommandText, params MySqlParameter[] parameter)
         {
+            MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
             int i = -1;
             MySqlCommand command = null;
             MySqlDataReader dataReader = null;
@@ -77,6 +77,7 @@ namespace CDNA_SkyDrive.Control
 
         public static int Execute(string CommandText, params MySqlParameter[] parameter)
         {
+            MySqlConnection connection = new MySqlConnection(Resources.GetResources("ConnectionString"));
             int i = 0;
             MySqlCommand command = null;
             try

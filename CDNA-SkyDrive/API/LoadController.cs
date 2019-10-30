@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Threading;
 
 namespace CDNA_SkyDrive.API
 {
@@ -17,6 +18,7 @@ namespace CDNA_SkyDrive.API
     public class LoadController : ControllerBase
     {
         private const string FilePath = "UpLoadFile/";
+        static Dictionary<string, CDNAFileStream> streamtable = new Dictionary<string, CDNAFileStream>();
 
         [HttpPost()]
         [Route("Up")]
@@ -82,6 +84,9 @@ namespace CDNA_SkyDrive.API
                         jo.Add("type", "file");
                         jo.Add("size", file.Length);
                         jo.Add("data", fileID);
+                        if (Dir.SelectFileName(filestr, pathlist, file.FileName))
+                            return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "重名", Message = "Error" }));
+                        pathlist = new Queue<string>(p);
                         JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
                         SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='' , State = 0 where UserName='{name}';");
@@ -136,7 +141,33 @@ namespace CDNA_SkyDrive.API
                 if ((table = SQLControl.Select($"SELECT * FROM testbase.HashTable where ID={nowdir["data"]};")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 string filepath = table.Rows[0][2].ToString();
-                return File(new FileStream(filepath, FileMode.Open), "application/octet-stream", p[p.Length - 1]);
+                bool k = false;
+                CDNAFileStream filestream = null;
+                foreach (string key in streamtable.Keys)
+                    if (key == filepath)
+                    {
+                        k = true;
+                        filestream = streamtable[key];
+                        break;
+                    }
+                if (!k)
+                {
+                    filestream = new CDNAFileStream(filepath, FileMode.Open);
+                    streamtable.Add(filepath, filestream);
+                }
+                long length = filestream.Length;
+                byte[] data = new byte[length];
+                for (long i = 0; i < filestream.Length; i++)
+                {
+                    while (!filestream.ISREAD) ;
+                    filestream.ISREAD = false;
+                    long nowpo = filestream.Position;
+                    filestream.Seek(i, SeekOrigin.Begin);
+                    data[i] = (byte)filestream.ReadByte();
+                    filestream.Seek(nowpo, SeekOrigin.Begin);
+                    filestream.ISREAD = true;
+                }
+                return File(data, "application/octet-stream", p[p.Length - 1]);
             }
             else
                 return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));

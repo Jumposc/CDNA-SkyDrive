@@ -22,6 +22,15 @@ namespace CDNA_SkyDrive.Control
             return null;
         }
 
+        public static bool SelectFileName(JArray jArray, Queue<string> list, string name)
+        {
+            JToken nowdir = Intodir(jArray, list);
+            foreach (JToken j in nowdir)
+                if (j["name"].ToString() == name)
+                    return true;
+            return false;
+        }
+
         public static JToken AddJson(JArray jArray, Queue<string> list, JToken addJson)
         {
             if (list.Count == 0)
