@@ -17,7 +17,7 @@ namespace CDNA_SkyDrive.API
     [ApiController]
     public class LoadController : ControllerBase
     {
-        private const string FilePath = "UpLoadFile/";
+        private const string FilePath = "/var/CDNA-SkyDrive/File";
         static Dictionary<string, CDNAFileStream> streamtable = new Dictionary<string, CDNAFileStream>();
 
         [HttpPost()]
@@ -43,7 +43,7 @@ namespace CDNA_SkyDrive.API
                         string ID = token.Split("-")[0];
                         ID = ID.Substring(0, ID.Length - 10);
                         DataTable table;
-                        if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
+                        if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserTable where  ID={ID};")) == null)
                             throw new NewSqlException();
                         name = table.Rows[0][1].ToString();
 
@@ -55,7 +55,7 @@ namespace CDNA_SkyDrive.API
                         hashParameter.Value = hash;
                         int fileID = 0;
                         //检查Hash表里是否有这个文件
-                        if (-1 == (fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", hashParameter)))
+                        if (-1 == (fileID = SQLControl.Select($"SELECT * FROM CDNABASE.HashTable where Hash = @hash;", hashParameter)))
                         {//没有就加进去
                             string filename = DateTime.Now.ToString("yyyyMMddhhmmss");
                             while (System.IO.File.Exists(FilePath + filename))
@@ -64,15 +64,15 @@ namespace CDNA_SkyDrive.API
                                 throw new IOException();
                             MySqlParameter blobParameter = new MySqlParameter("@hash", MySqlDbType.TinyBlob);
                             blobParameter.Value = hash;
-                            if (0 == SQLControl.Execute($"insert testbase.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter))
+                            if (0 == SQLControl.Execute($"insert CDNABASE.HashTable value (0,@hash,'{FilePath + filename}');", blobParameter))
                                 throw new NewSqlException();
-                            fileID = SQLControl.Select($"SELECT * FROM testbase.HashTable where Hash = @hash;", blobParameter);
+                            fileID = SQLControl.Select($"SELECT * FROM CDNABASE.HashTable where Hash = @hash;", blobParameter);
                         }
                         //把Hash绑定到用户文件列表上
                         do
                         {
                             table = null;
-                            if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
+                            if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserFileTable where UserName='{name}';")) == null)
                                 throw new NewSqlException();
                         } while (int.Parse(table.Rows[0][2].ToString()) != 1);
                         filestr = JArray.Parse(table.Rows[0][1].ToString());
@@ -89,8 +89,8 @@ namespace CDNA_SkyDrive.API
                         pathlist = new Queue<string>(p);
                         JToken newdir = Dir.AddJson(filestr, pathlist, JToken.Parse(jo.ToString()));
 
-                        SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='' , State = 0 where UserName='{name}';");
-                        SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{newdir.ToString()}',State = 1 where UserName='{name}';");
+                        SQLControl.Execute($"UPDATE CDNABASE.UserFileTable SET File='' , State = 0 where UserName='{name}';");
+                        SQLControl.Execute($"UPDATE CDNABASE.UserFileTable SET File='{newdir.ToString()}',State = 1 where UserName='{name}';");
                     }
                 }
                 catch (IOException)
@@ -108,7 +108,7 @@ namespace CDNA_SkyDrive.API
                 catch (MySqlException)
                 {
                     if (filestr != null)
-                        SQLControl.Execute($"UPDATE testbase.UserFileTable SET File='{filestr.ToString()}' , State = 1 where UserName='{name}';");
+                        SQLControl.Execute($"UPDATE CDNABASE.UserFileTable SET File='{filestr.ToString()}' , State = 1 where UserName='{name}';");
                 }
             }
             else
@@ -128,17 +128,17 @@ namespace CDNA_SkyDrive.API
                 string ID = token.Split("-")[0];
                 ID = ID.Substring(0, ID.Length - 10);
                 DataTable table;
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID={ID};")) == null)
+                if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserTable where  ID={ID};")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 string name = table.Rows[0][1].ToString();
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName='{name}';")) == null)
+                if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserFileTable where UserName='{name}';")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 JToken file = JToken.Parse(table.Rows[0][1].ToString());
                 Queue<string> pathlist = new Queue<string>(p);
                 JToken nowdir = Dir.Intodir(file, pathlist);
                 if (nowdir == null)
                     return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "文件路径错误", Message = "Error" }));
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.HashTable where ID={nowdir["data"]};")) == null)
+                if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.HashTable where ID={nowdir["data"]};")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 string filepath = table.Rows[0][2].ToString();
                 bool k = false;

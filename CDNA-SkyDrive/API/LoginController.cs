@@ -21,7 +21,7 @@ namespace CDNA_SkyDrive.API
             if (!string.IsNullOrEmpty(user.Name) | !string.IsNullOrWhiteSpace(user.Name) | !string.IsNullOrEmpty(user.Pwds) | !string.IsNullOrWhiteSpace(user.Pwds))
             {
                 DataTable s;
-                if ((s = SQLControl.Select($"SELECT * FROM testbase.UserTable where  UserName='{user.Name}'and PassWord='{user.Pwds}';")) == null)
+                if ((s = SQLControl.Select($"SELECT * FROM CDNABASE.UserTable where  UserName='{user.Name}'and PassWord='{user.Pwds}';")) == null)
                     Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" });
                 if (s.Rows.Count != 0)
                     Json = JsonConvert.SerializeObject(new ReturnMode() { Data = Token.GetToken(s.Rows[0][0].ToString()), Message = "OK" });

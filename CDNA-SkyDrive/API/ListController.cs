@@ -25,11 +25,11 @@ namespace CDNA_SkyDrive.API
                 string ID = a.Split("-")[0];
                 ID = ID.Substring(0, ID.Length - 10);
                 DataTable table;
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserTable where  ID = {ID};")) == null)
+                if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserTable where  ID = {ID};")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 string name = table.Rows[0][1].ToString();
                 table = null;
-                if ((table = SQLControl.Select($"SELECT * FROM testbase.UserFileTable where UserName = '{name}';")) == null)
+                if ((table = SQLControl.Select($"SELECT * FROM CDNABASE.UserFileTable where UserName = '{name}';")) == null)
                     return StatusCode(500, JsonConvert.SerializeObject(new ReturnMode() { Data = "数据库错误", Message = "Error" }));
                 JToken file = JToken.Parse(table.Rows[0][1].ToString());
                 JToken nowdir = Dir.Intodir(file, path);
