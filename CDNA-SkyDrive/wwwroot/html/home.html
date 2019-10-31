@@ -7,6 +7,7 @@
     <link href="../css/home.css" type="text/css" rel="stylesheet" />
     <link rel="icon" href="data:;base64,=">
     <style>
+
     </style>
 </head>
 <body onload="OnLoadEvn()">
@@ -14,23 +15,24 @@
         <a class="logo" href="home.html">
             <img src="../images/logo.png" height="18%" width="18%" />
         </a>
-        <div class="user-info">
+        <div class="user-info" id="user-info">
             <span class="user-img-container"></span>
             <span id="user-head-name">匿名用户</span>
             <div class="down-btn">
             </div>
         </div>
     </header>
-    <div class="user-controller">
+    <div class="temp" id="temp"></div>
+    <div class="user-controller" id="user-controller">
         <div class="triangle"></div>
         <div class="user-controller-info">
             <span class="user-controller-img"></span>
-            <span class="user-controller-name">啧啧啧哈哈哈哈哈哈哈</span>
+            <span class="user-controller-name" id="user-controller-name"></span>
         </div>
         <ul class="controller-list">
             <li>更换头像</li>
             <li>修改密码</li>
-            <li id="exit-login">退出登陆</li>
+            <li id="exit-login"><a onclick="ExitLogin()">退出登陆</a></li>
         </ul>
     </div>
     <aside class="type">
@@ -50,10 +52,10 @@
         </ul>
         <div class="percent">
             <div class="percent-container">
-                <span class="percent-text">90%</span>
+                <span class="percent-text">0%</span>
             </div>
             <div class="disk-valume">
-                <p class="disk-text">28g/30g</p>
+                <p class="disk-text">0g/30g</p>
             </div>
         </div>
     </aside>

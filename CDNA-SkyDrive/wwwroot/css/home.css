@@ -21,11 +21,11 @@
     width: 290px;
 }
 
-.logo {
-    position: absolute;
-    top: 8px;
-    left: 50px;
-}
+    .logo {
+        position: absolute;
+        top: 8px;
+        left: 50px;
+    }
 
 #user-head-name {
     position: absolute;
@@ -87,7 +87,7 @@
 .percent-container {
     height: 10px;
     background-color: #00ffff;
-    width: 90%;
+    width: 0%;
 }
 
 .percent-text {
@@ -473,7 +473,11 @@
         font-size: 16px;
         padding: 5px;
         border-bottom: 1px solid #3190f9;
+        cursor:pointer;
     }
+.controller-list li:hover{
+    background-color:rgba(137, 193, 255, 0.84);
+}
 
 #exit-login {
     border-bottom: none;
@@ -514,4 +518,15 @@
     border: 1px solid #4fb2b8;
     border-radius: 50%;
     cursor: pointer;
+}
+#temp {
+    width: 280px;
+    height: 280px;
+    position: absolute;
+    right: 130px;
+    top: 10px;
+    z-index: 1;
+    background: transparent;
+    display: none;
+    opacity: 0;
 }
