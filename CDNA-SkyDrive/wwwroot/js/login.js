@@ -12,7 +12,24 @@
         CheckLogin();
     }
 }
-
+function CheckLoginToken() {
+    if (document.cookie.indexOf("Token") != -1) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/api/Token");
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                window.location.href = "./html/home.html";
+                return;
+            } else if ((xmlhttp.status != 200) && (xmlhttp.readyState == 4)) {
+                document.cookie = "Token=;" + "expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
+                return;
+            }
+        }
+    } else {
+        return;
+    }
+    xmlhttp.send();
+}
 var timeout = 0;
 function CheckLogin() {
     timeout++;
@@ -22,8 +39,10 @@ function CheckLogin() {
             var day = new Date();
             day.setHours(day.getHours() + 24);
             var cook = "Token=" + json.Data + ";" + "expires=" + day.toUTCString();
+            var Username = "UserName=" + document.getElementById("input-user").value + ";";
             document.cookie = cook;
-            window.location.href = "../html/home.html";
+            document.cookie = Username;
+            window.location.href = "./html/home.html";
         } else {
             EchoLoginError("用户名或密码错误");
         }

@@ -170,7 +170,7 @@ function FindFileType(FileList) {
             File.push(FileList[i]);
         }
     }
-    document.getElementById("now-type-text").innerHTML = "全部文件,共" + file.length + "个文件"; 
+    document.getElementById("now-type-text").innerHTML = "全部文件,共" + file.length + "个文件";
     CreateFileDirList(FileDir);
     CreateFileList(File);
 }
@@ -336,9 +336,27 @@ function NewDir() {
         var Container = document.getElementById("file-list-container");
         Container.insertBefore(Ul, Container.firstChild);
         document.getElementById("dir-name").focus();
+        document.onkeydown = function (e) {
+            if (e && e.keyCode == 13) {
+                if (document.getElementById("dir-name").value.split(" ") != "") {
+                    AddDir(document.getElementById("dir-name").value);
+                } else {
+                    return;
+                }
+
+            }
+            if (e && e.keyCode == 27) {
+                UnAddDir();
+            }
+        }
     } else {
         return;
     }
+}
+//取消新建文件夹输入
+function UnAddDir() {
+    var RmList = document.getElementsByClassName("file")[0];
+    RmList.remove();
 }
 //添加列表动态样式
 function AddEven() {
@@ -349,12 +367,83 @@ function AddEven() {
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
 }
+function CheckToken() {
+    if (document.cookie.indexOf("Token") != -1) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "/api/Token");
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+                return;
+            } else if (xmlhttp.status == 400 && xmlhttp.readyState == 4) {
+                document.cookie = "Token=;" + "expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
+                window.alert("登陆已过期");
+                window.location.href = "../index.html";
+                return;
+            } else if ((xmlhttp.status != 200) && (xmlhttp.status != 400) && (xmlhttp.readyState == 4)) {
+                window.alert("服务器维护中");
+                window.location.href = "about:blank";
+                return;
+            }
+        }
+    } else {
+        window.alert("你还没有登陆！");
+        window.location.href = "../index.html";
+    }
+    xmlhttp.send();
+}
+//显示用户列表方法
+function SetContorBox() {
+    var InfoBox = document.getElementById("user-info");
+    var TempBox = document.getElementById("temp");
+    var ControllerBox = document.querySelectorAll(".user-controller, .user-controller div, .user-controller ul");
+    InfoBox.addEventListener("mouseover", function () {
+        TempBox.style.display = "block";
+        for (i = 0; i < ControllerBox.length; i++) {
+            ControllerBox[i].style.display = "block"
+        }
+    });
+    TempBox.addEventListener("mouseover", function () {
+        TempBox.style.display = "block";
+        for (i = 0; i < ControllerBox.length; i++) {
+            ControllerBox[i].style.display = "block";
+        }
+    }
+    );
+    TempBox.addEventListener("mouseout", function () {
+        setTimeout(function () {
+            TempBox.style.display = "none";
+            for (i = 0; i < ControllerBox.length; i++) {
+                ControllerBox[i].style.display = "none";
+            }
+        }, 4000)
+    })
+    var BoxAll = document.querySelectorAll(".user-controller *");
+    for (i = 0; i < BoxAll.length; i++) {
+        BoxAll[i].addEventListener("mouseover", function () { BoxAll[i].style.display = "block"; })
+    }
+
+}
+//退出登陆
+function ExitLogin() {
+    var cook = "Token=ex;expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
+    var Username = "UserName=root;expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
+    document.cookie = cook;
+    document.cookie = Username;
+    window.location.href = "../index.html";
+}
 
 //页面加载时，添加事件
 function OnLoadEvn() {
+    CheckToken();
     GetUserFileList(NowPath);
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
+    var Name = document.getElementById("user-head-name");
+    var CookName = document.cookie.split(";")[1].split("=")[1];
+    Name.innerHTML = CookName;
+    var ContrName = document.getElementById("user-controller-name");
+    ContrName.innerHTML = CookName;
+    SetContorBox();
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;
