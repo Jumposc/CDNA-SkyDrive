@@ -79,19 +79,21 @@ function PostFile() {
         })
         xhr.send(form);
         xhr.onreadystatechange = function () {
-            if (xhr.status == 200 && JSON.parse(xhr.responseText).Message == "OK") {
+            if (xhr.status == 200 && JSON.parse(xhr.responseText).Message == "OK" && xhr.readyState == 4) {
                 for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传成功";
                 }
                 GetUserFileList(NowPath);
+                var FileValue = document.getElementById("input-file");
+                FileValue.value = null;
             } else {
                 for (i = PreBox.length - fileobj.length; i < PreBox.length; i++) {
                     PreBox[i].innerHTML = "上传失败";
                     PreBox[i].style.backgroundColor = "#db2828";
+                    var FileValue = document.getElementById("input-file");
+                    FileValue.value = null;
                 }
             }
-            var FileValue = document.getElementById("input-file");
-            FileValue.value = null;
         }
     }
 }
