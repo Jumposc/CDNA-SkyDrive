@@ -336,9 +336,27 @@ function NewDir() {
         var Container = document.getElementById("file-list-container");
         Container.insertBefore(Ul, Container.firstChild);
         document.getElementById("dir-name").focus();
+        document.onkeydown = function (e) {
+            if (e && e.keyCode == 13) {
+                if (document.getElementById("dir-name").value.split(" ") != "" ) {
+                    AddDir(document.getElementById("dir-name").value);
+                } else {
+                    return;
+                }
+                
+            }
+            if (e && e.keyCode == 27) {
+                UnAddDir();
+            }
+        }
     } else {
         return;
     }
+}
+//取消新建文件夹输入
+function UnAddDir() {
+    var RmList = document.getElementsByClassName("file")[0];
+    RmList.remove();
 }
 //添加列表动态样式
 function AddEven() {
@@ -349,12 +367,24 @@ function AddEven() {
         evntul[i].addEventListener("mouseout", SetDisplay(han[i], "none"));
     }
 }
+function CheckToken() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "api/Token");
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.status == 200) {
+
+        }
+    }
+}
 
 //页面加载时，添加事件
 function OnLoadEvn() {
     GetUserFileList(NowPath);
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
+    var Name = document.getElementById("user-head-name");
+    var URLName = window.location.search.replace("?", "").split("=")[1];
+    Name.innerHTML = URLName;
     var loadbox = document.getElementById("load-box");
     var x = 0;
     var y = 0;

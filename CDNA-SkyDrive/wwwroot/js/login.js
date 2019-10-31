@@ -23,7 +23,7 @@ function CheckLogin() {
             day.setHours(day.getHours() + 24);
             var cook = "Token=" + json.Data + ";" + "expires=" + day.toUTCString();
             document.cookie = cook;
-            window.location.href = "../html/home.html";
+            window.location.href = "../html/home.html?" + "name=" + document.getElementById("input-user").value ;
         } else {
             EchoLoginError("用户名或密码错误");
         }
