@@ -18,7 +18,7 @@ namespace CDNA_SkyDrive.API
         public IActionResult CheckToken()
         {
             if (Token.CheckToken(Request.Cookies["Token"]))
-                return Ok();
+                return Ok(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token验证正确", Message = "OK" }));
             else
                 return BadRequest(JsonConvert.SerializeObject(new ReturnMode() { Data = "Token错误", Message = "Error" }));
         }

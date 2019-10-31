@@ -24,8 +24,8 @@ namespace CDNA_SkyDrive.API
                     if (0 != SQLControl.Execute($"insert CDNABASE.UserDataTable value ('{user.Name}','{user.PhoneNumber}','InitialImage.jpg');"))
                         if (0 != SQLControl.Execute($"insert CDNABASE.UserFileTable value ('{user.Name}','{Token.s}',1);"))
                             Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册成功", Message = "OK" });
-                        else Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，服务器错误", Message = "OK" });
-                    else Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，服务器错误", Message = "OK" });
+                        else Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，服务器错误", Message = "Error" });
+                    else Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，服务器错误", Message = "Error" });
                 }
                 else Json = JsonConvert.SerializeObject(new ReturnMode() { Data = "注册失败，或有重复用户名", Message = "Error" });
             }
