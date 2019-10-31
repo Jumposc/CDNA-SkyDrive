@@ -170,6 +170,7 @@ function FindFileType(FileList) {
             File.push(FileList[i]);
         }
     }
+    document.getElementById("now-type-text").innerHTML = "全部文件,共" + file.length + "个文件"; 
     CreateFileDirList(FileDir);
     CreateFileList(File);
 }
@@ -298,11 +299,11 @@ function LoopDown() {
 //新建文件夹
 function AddDir(name) {
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("POST", "/api/Load/AddDir", true);
+    xmlhttp.open("POST", "/api/AddDir");
     xmlhttp.setRequestHeader("Path", NowPath);
     xmlhttp.setRequestHeader("DirName", name);
     xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.status == 200 && xmlhttp.readyState == 4) {
+        if (xmlhttp.status == 200) {
             GetUserFileList(NowPath);
         } else {
             window.alert("新建文件夹错误");
@@ -312,12 +313,31 @@ function AddDir(name) {
 }
 //新建一个输入列表
 function NewDir() {
-    var Ul = document.createElement("ul");
-    Ul.className = "file";
-    var LiName = ["file-name", "file-size", "file-date"];
-    for (i = 0; i < LiName.length; i++) {
-        var Li = document.createElement("li");
-        Li.className = LiName[i];
+    if (document.getElementsByClassName("dir-input").length == 0) {
+        var Ul = document.createElement("ul");
+        Ul.className = "file";
+        var LiName = ["file-name", "file-size", "file-date"];
+        for (i = 0; i < LiName.length; i++) {
+            var Li = document.createElement("li");
+            Li.className = LiName[i];
+            Li.id = LiName[i] + "-dir";
+            Ul.appendChild(Li);
+        }
+        var InnerLi = Ul.childNodes[0];
+        var InputEL = [{ class: "dir-input", type: "text", onclick: "", id: "dir-name" }, { class: "dir-input", type: "button", onclick: function () { AddDir(document.getElementById("dir-name").value) }, id: "dir-true" }, { class: "dir-input", type: "button", onclick: function () { UnAddDir() }, id: "dir-false" }];
+        for (i = 0; i < 3; i++) {
+            var input = document.createElement("input");
+            input.className = InputEL[i].class;
+            input.type = InputEL[i].type;
+            input.onclick = InputEL[i].onclick;
+            input.id = InputEL[i].id;
+            InnerLi.appendChild(input);
+        }
+        var Container = document.getElementById("file-list-container");
+        Container.insertBefore(Ul, Container.firstChild);
+        document.getElementById("dir-name").focus();
+    } else {
+        return;
     }
 }
 //添加列表动态样式
