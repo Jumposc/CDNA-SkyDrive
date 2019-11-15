@@ -427,8 +427,8 @@ function SetContorBox() {
 }
 //退出登陆
 function ExitLogin() {
-    var cook = "Token=ex;expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
-    var Username = "UserName=root;expires=Thu, 01 Jan 1970 00: 00: 00 GMT";
+    var cook = "Token=;expires=Thu, 01 Jan 1970 00: 00: 00 GMT;path=/";
+    var Username = "UserName=root;expires=Thu, 01 Jan 1970 00: 00: 00 GMT;path=/";
     document.cookie = cook;
     document.cookie = Username;
     window.location.href = "../index.html";
