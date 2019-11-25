@@ -441,7 +441,7 @@ function OnLoadEvn() {
     var inputbtn = document.getElementById("input-file");
     inputbtn.addEventListener("change", PostFile());
     var Name = document.getElementById("user-head-name");
-    var CookName = document.cookie.split(";")[1].split("=")[1];
+    var CookName = Cookies.get('UserName');
     Name.innerHTML = CookName;
     var ContrName = document.getElementById("user-controller-name");
     ContrName.innerHTML = CookName;
