@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UpLoadFile\**" />
+    <Content Remove="UpLoadFile\**" />
+    <EmbeddedResource Remove="UpLoadFile\**" />
+    <None Remove="UpLoadFile\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources.txt" />
   </ItemGroup>
 
@@ -20,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
-    <Folder Include="UpLoadFile\" />
   </ItemGroup>
 
   <ItemGroup>
